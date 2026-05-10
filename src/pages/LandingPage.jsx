@@ -12,6 +12,9 @@ export default function LandingPage() {
   const [filter, setFilter] = useState("all");
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const [showUnlockModal, setShowUnlockModal] = useState(false);
+  const [activeTooltip, setActiveTooltip] = useState(null);
+
   const portfolioItems = [
     { id: 1, cat: "events", name: "The Venter Wedding", img: "https://picsum.photos/seed/signage1/800/600", className: "" },
     { id: 2, cat: "business", name: "Café Lumière Menu Board", img: "https://picsum.photos/seed/signage2/800/1000", className: "tall" },
@@ -25,139 +28,87 @@ export default function LandingPage() {
 
   useLayoutEffect(() => {
     let ctx = gsap.context(() => {
-      // 1. HERO ENTRANCE
-      const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
-      tl.to('.hero-eyebrow', { opacity: 1, y: 0, duration: 1, delay: 0.3 })
-        .to('.hero-headline', { opacity: 1, y: 0, duration: 1.2 }, '-=0.7')
-        .to('.hero-ctas', { opacity: 1, y: 0, duration: 0.9 }, '-=0.8');
+      // 1. HERO ENTRANCE (Editorial Reveal)
+      const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+      tl.to('.hero-headline', { clipPath: 'inset(0 0% 0 0)', duration: 1.5, delay: 0.5 })
+        .to('.hero-eyebrow', { opacity: 1, y: 0, duration: 1 }, '-=1')
+        .to('.hero-ctas', { opacity: 1, y: 0, duration: 1 }, '-=0.8');
 
-      // 2. SPOTLIGHT
+      // 2. SPOTLIGHT (High Precision)
       const circle = document.getElementById('spotCircle');
       const heroWrap = document.getElementById('spotlight-wrap');
-      const trail = document.getElementById('cursor-trail');
-
+      
       if (heroWrap && circle) {
-        let mx = -500, my = -500;
-        let cx = -500, cy = -500;
-        let dots = [];
+        let mx = -1000, my = -1000;
+        let cx = -1000, cy = -1000;
 
-        const spawnDot = (x, y) => {
-          const dot = document.createElement('div');
-          dot.className = 'trail-dot';
-          const size = Math.random() * 60 + 30;
-          dot.style.cssText = `left: ${x}px; top: ${y}px; width: ${size}px; height: ${size}px; opacity: 0.6;`;
-          trail.appendChild(dot);
-          dots.push(dot);
-
-          gsap.to(dot, {
-            opacity: 0, scale: 2, duration: 1.4, ease: 'power2.out',
-            onComplete: () => { dot.remove(); dots = dots.filter(d => d !== dot); }
-          });
-        };
-
-        let lastDotTime = 0;
         heroWrap.addEventListener('mousemove', (e) => {
           const rect = heroWrap.getBoundingClientRect();
           mx = e.clientX - rect.left;
           my = e.clientY - rect.top;
-          const now = Date.now();
-          if (now - lastDotTime > 60) {
-            spawnDot(mx, my);
-            lastDotTime = now;
-          }
         });
 
         gsap.ticker.add(() => {
-          cx += (mx - cx) * 0.12;
-          cy += (my - cy) * 0.12;
+          cx += (mx - cx) * 0.08;
+          cy += (my - cy) * 0.08;
           circle.setAttribute('cx', cx);
           circle.setAttribute('cy', cy);
         });
       }
 
-      // 3. NAV SCROLL TINT
-      const nav = document.getElementById('site-nav');
-      ScrollTrigger.create({
-        start: 80,
-        onUpdate: (self) => {
-          if (self.progress > 0) {
-            nav.style.background = 'rgba(8,8,6,0.85)';
-            nav.style.backdropFilter = 'blur(16px)';
-            nav.style.borderBottom = '1px solid rgba(242,237,230,0.05)';
-          } else {
-            nav.style.background = 'transparent';
-            nav.style.backdropFilter = 'none';
-            nav.style.borderBottom = 'none';
-          }
-        }
-      });
-
       // 4. SCROLL REVEALS
       gsap.utils.toArray('.reveal-text').forEach(el => {
         gsap.fromTo(el,
-          { clipPath: 'inset(0 100% 0 0)' },
-          { clipPath: 'inset(0 0% 0 0)', duration: 1.2, ease: 'power4.inOut', scrollTrigger: { trigger: el, start: 'top 82%', toggleActions: 'play none none none' } }
+          { clipPath: 'inset(0 100% 0 0)', y: 20 },
+          { clipPath: 'inset(0 0% 0 0)', y: 0, duration: 1.5, ease: 'power4.inOut', scrollTrigger: { trigger: el, start: 'top 85%' } }
         );
       });
-
-      gsap.utils.toArray('.section-label').forEach(el => {
-        gsap.fromTo(el,
-          { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: 0.8, scrollTrigger: { trigger: el, start: 'top 85%' } }
-        );
-      });
-
-      gsap.fromTo('.service-card', { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.9, stagger: 0.15, ease: 'power3.out', scrollTrigger: { trigger: '.services-grid', start: 'top 75%' } });
-      gsap.fromTo('.portfolio-item', { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 0.8, stagger: { amount: 0.8, from: 'start' }, ease: 'power3.out', scrollTrigger: { trigger: '.portfolio-grid', start: 'top 80%' } });
-      gsap.fromTo('.pricing-card', { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 1, stagger: 0.15, ease: 'power3.out', scrollTrigger: { trigger: '.pricing-grid', start: 'top 78%' } });
-      gsap.fromTo('.about-image-wrap', { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 1.2, ease: 'power3.out', scrollTrigger: { trigger: '#about', start: 'top 75%' } });
-      gsap.fromTo('.about-text', { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 1.2, ease: 'power3.out', scrollTrigger: { trigger: '#about', start: 'top 75%' } });
-      gsap.fromTo('.contact-grid', { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '#contact', start: 'top 78%' } });
-
     }, container);
 
     return () => ctx.revert();
   }, []);
 
-  useLayoutEffect(() => {
-    gsap.to('.portfolio-item', {
-      opacity: (i, el) => filter === 'all' || el.dataset.cat === filter ? 1 : 0.15,
-      scale: (i, el) => filter === 'all' || el.dataset.cat === filter ? 1 : 0.97,
-      duration: 0.4,
-      ease: 'power2.out',
-      pointerEvents: (i, el) => filter === 'all' || el.dataset.cat === filter ? 'auto' : 'none'
-    });
-  }, [filter]);
-
   const handleSaveToVault = (e) => {
     e.preventDefault();
-    navigate('/auth?signup=true');
-  };
-
-  const scrollTo = (id) => {
-    const el = document.getElementById(id);
-    if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
-    setMenuOpen(false);
+    setShowUnlockModal(true);
   };
 
   return (
-    <div ref={container}>
+    <div ref={container} className="bg-[#080806]">
+      {/* Vault Unlock Modal */}
+      {showUnlockModal && (
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-6">
+          <div className="absolute inset-0 bg-[#080806]/90 backdrop-blur-xl" onClick={() => setShowUnlockModal(false)} />
+          <div className="glass-panel max-w-lg w-full p-12 relative z-10 text-center border-[#E8DFD0]/20">
+            <Heart size={48} className="mx-auto mb-8 text-[#E8DFD0] animate-pulse" />
+            <h2 className="text-4xl font-display font-semibold mb-4 text-[#E8DFD0]">Unlock The Bridal Vault</h2>
+            <p className="text-[#E8DFD0]/60 font-light mb-10 leading-relaxed text-lg">
+              Save your favorite inspirations, access our Signage Master Checklist, and track your custom project from design to delivery.
+            </p>
+            <div className="flex flex-col gap-4">
+              <Link to="/auth?signup=true" className="btn-primary py-5">Create My Vault</Link>
+              <button onClick={() => setShowUnlockModal(false)} className="text-[#E8DFD0]/40 uppercase tracking-widest text-xs hover:text-[#E8DFD0] transition-colors">Maybe Later</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* NAV */}
       <nav id="site-nav">
         <div className="nav-logo">AURA SIGNS</div>
         <div className="bubble-menu" id="bubbleMenu">
           <button className="bubble-trigger" onClick={() => setMenuOpen(!menuOpen)}>
-            <span style={{ transform: menuOpen ? 'translateY(4px)' : 'none' }}></span>
-            <span></span>
-            <span style={{ transform: menuOpen ? 'translateY(-4px)' : 'none' }}></span>
+            <div className="flex gap-1">
+              <span className={`w-1 h-1 rounded-full bg-[#E8DFD0] transition-all ${menuOpen ? 'scale-150' : ''}`} />
+              <span className={`w-1 h-1 rounded-full bg-[#E8DFD0] transition-all ${menuOpen ? 'scale-150' : ''}`} />
+              <span className={`w-1 h-1 rounded-full bg-[#E8DFD0] transition-all ${menuOpen ? 'scale-150' : ''}`} />
+            </div>
           </button>
           <div className={`bubble-pill ${menuOpen ? 'open' : ''}`}>
             <button onClick={() => scrollTo('hero')} className="bubble-link" style={{ '--hc': '#C9603A' }}>Home</button>
             <button onClick={() => scrollTo('services')} className="bubble-link" style={{ '--hc': '#7A8C6E' }}>Services</button>
             <button onClick={() => scrollTo('portfolio')} className="bubble-link" style={{ '--hc': '#E8DFD0' }}>Portfolio</button>
-            <button onClick={() => scrollTo('pricing')} className="bubble-link" style={{ '--hc': '#C9603A' }}>Pricing</button>
-            <button onClick={() => scrollTo('about')} className="bubble-link" style={{ '--hc': '#7A8C6E' }}>About</button>
-            <Link to="/auth" className="bubble-link" style={{ '--hc': '#E8DFD0' }}>The Vault</Link>
+            <Link to="/auth" className="bubble-link" style={{ '--hc': '#C9A96E' }}>The Vault</Link>
           </div>
         </div>
       </nav>
@@ -166,86 +117,94 @@ export default function LandingPage() {
       <section id="hero">
         <div id="spotlight-wrap">
           <div id="hero-base">
-            <img src="https://picsum.photos/seed/signage-hero/1600/900" alt="Aura Signs hero" id="hero-img" />
+            <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=2000" alt="Aura Signs hero" id="hero-img" />
             <div id="hero-base-overlay"></div>
           </div>
           <div id="hero-reveal">
-            <img src="https://picsum.photos/seed/signage-install/1600/900" alt="Signage installation" id="reveal-img" />
+            <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&q=80&w=2000" alt="Signage installation" id="reveal-img" />
           </div>
           <svg id="spotlight-svg" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <radialGradient id="spotGrad" cx="50%" cy="50%" r="50%">
                 <stop offset="0%" stopColor="white" stopOpacity="1"/>
-                <stop offset="80%" stopColor="white" stopOpacity="0.9"/>
+                <stop offset="60%" stopColor="white" stopOpacity="0.8"/>
                 <stop offset="100%" stopColor="white" stopOpacity="0"/>
               </radialGradient>
               <mask id="spotMask">
                 <rect width="100%" height="100%" fill="black"/>
-                <circle id="spotCircle" cx="-500" cy="-500" r="460" fill="url(#spotGrad)"/>
+                <circle id="spotCircle" cx="-1000" cy="-1000" r="500" fill="url(#spotGrad)"/>
               </mask>
             </defs>
             <rect width="100%" height="100%" fill="transparent" mask="url(#spotMask)"/>
           </svg>
-          <div id="cursor-trail"></div>
         </div>
         <div className="hero-content">
-          <p className="hero-eyebrow">Aesthetic Branding & Event Signage — Cape Town</p>
-          <h1 className="hero-headline">Signs That<br /><em>Say Something.</em></h1>
-          <div className="hero-ctas flex flex-col sm:flex-row items-center gap-4 mt-8">
-            <button onClick={() => scrollTo('portfolio')} className="btn-primary">View Our Work</button>
-            <Link to="/auth?signup=true" className="btn-outline">Unlock The Bridal Vault</Link>
+          <p className="hero-eyebrow opacity-0 translate-y-4">Premium Wedding & Event Signage — Cape Town</p>
+          <h1 className="hero-headline" style={{ clipPath: 'inset(0 100% 0 0)' }}>Signs That<br /><em>Say Something.</em></h1>
+          <div className="hero-ctas flex flex-col sm:flex-row items-center gap-6 mt-12 opacity-0 translate-y-4">
+            <button onClick={() => scrollTo('portfolio')} className="btn-primary px-12">Explore Portfolio</button>
+            <Link to="/auth?signup=true" className="btn-outline px-12 border-[#E8DFD0]/40">Unlock The Vault</Link>
           </div>
-        </div>
-        <div className="hero-scroll-hint">
-          <span>Scroll</span>
-          <div className="scroll-line"></div>
         </div>
       </section>
 
       {/* SERVICES */}
-      <section id="services">
-        <div className="section-label">What We Do</div>
-        <h2 className="section-title reveal-text">Crafted for<br /><em>Every Occasion</em></h2>
-        <div className="services-grid">
+      <section id="services" className="py-32">
+        <div className="section-label text-center">Our Expertise</div>
+        <h2 className="section-title reveal-text text-center">Crafted for<br /><em>Memorable Moments</em></h2>
+        <div className="services-grid max-w-6xl mx-auto">
           {[
-            { num: '01', title: 'Event Signage', desc: 'Weddings, birthdays, celebrations — signs designed for moments that matter.', tags: ['Weddings', 'Birthdays', 'Celebrations'] },
-            { num: '02', title: 'Business Signage', desc: 'Menus, vinyl, retail displays — your brand, made visible with intention.', tags: ['Menus', 'Vinyl', 'Retail'] },
-            { num: '03', title: 'Custom Projects', desc: 'Acrylic, large format, bespoke — if you can dream it, we can sign it.', tags: ['Acrylic', 'Large Format', 'Bespoke'] }
+            { num: '01', title: 'Event Signage', desc: 'From minimal welcome boards to intricate seating charts that guide your guests with grace.', tags: ['Weddings', 'Celebrations'] },
+            { num: '02', title: 'Business Branding', desc: 'Elevate your commercial space with custom vinyl, menu boards, and retail installations.', tags: ['Retail', 'Corporate'] },
+            { num: '03', title: 'Bespoke Projects', desc: 'If you have a unique vision in acrylic, mirror, or wood, we bring it to life.', tags: ['Acrylic', 'Mirror', 'Bespoke'] }
           ].map((s) => (
-            <div key={s.num} className="service-card" data-index={s.num}>
-              <div className="service-num">{s.num}</div>
-              <div className="service-body">
-                <h3 className="service-name"><em>{s.title}</em></h3>
-                <p className="service-desc">{s.desc}</p>
+            <div key={s.num} className="service-card group border-[#E8DFD0]/5 hover:border-[#E8DFD0]/20 transition-all duration-500">
+              <div className="service-num opacity-20 group-hover:opacity-40 transition-opacity">{s.num}</div>
+              <div className="relative z-10">
+                <h3 className="service-name text-3xl mb-4"><em>{s.title}</em></h3>
+                <p className="service-desc text-[#E8DFD0]/50 mb-8">{s.desc}</p>
                 <div className="service-tags">
-                  {s.tags.map(t => <span key={t}>{t}</span>)}
+                  {s.tags.map(t => <span key={t} className="border-[#E8DFD0]/10 text-xs px-3 py-1 uppercase tracking-widest">{t}</span>)}
                 </div>
               </div>
-              <div className="service-glow"></div>
             </div>
           ))}
         </div>
       </section>
 
       {/* PORTFOLIO */}
-      <section id="portfolio">
-        <h2 className="portfolio-title reveal-text"><em>The Work</em></h2>
-        <div className="portfolio-filters">
+      <section id="portfolio" className="py-24 px-8">
+        <h2 className="portfolio-title reveal-text mb-16"><em>The Work</em></h2>
+        <div className="portfolio-filters flex justify-center mb-16">
           {['all', 'events', 'business', 'custom'].map(f => (
-            <button key={f} className={`filter-btn ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
+            <button key={f} className={`filter-btn mx-2 ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
               {f.charAt(0).toUpperCase() + f.slice(1)}
             </button>
           ))}
         </div>
-        <div className="portfolio-grid" id="portfolioGrid">
+        <div className="portfolio-grid max-w-[1800px] mx-auto">
           {portfolioItems.map((p) => (
-            <div key={p.id} className={`portfolio-item ${p.className}`} data-cat={p.cat}>
-              <img src={p.img} alt={p.name} loading="lazy" />
-              <div className="portfolio-hover">
-                <span className="p-cat capitalize">{p.cat}</span>
-                <span className="p-name">{p.name}</span>
-                <button onClick={handleSaveToVault} className="mt-4 flex items-center gap-2 text-xs uppercase tracking-widest bg-white/10 hover:bg-white/20 px-4 py-2 rounded-none backdrop-blur-sm transition-colors border border-white/20">
-                  <Heart size={14} /> Save to Vault
+            <div 
+              key={p.id} 
+              className={`portfolio-item ${p.className} relative group cursor-none`} 
+              data-cat={p.cat}
+              onMouseEnter={() => setActiveTooltip(p.id)}
+              onMouseLeave={() => setActiveTooltip(null)}
+            >
+              <img src={p.img} alt={p.name} loading="lazy" className="grayscale group-hover:grayscale-0 transition-all duration-700" />
+              
+              {/* Guest Save Hint */}
+              {activeTooltip === p.id && (
+                <div className="absolute top-4 left-4 z-50 bg-[#E8DFD0] text-[#080806] px-4 py-2 text-[10px] uppercase tracking-widest font-bold flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  <Heart size={12} fill="currentColor" /> Save to Vault
+                </div>
+              )}
+
+              <div className="portfolio-hover p-12 bg-gradient-to-t from-[#080806] via-[#080806]/40 to-transparent">
+                <span className="p-cat text-[#C9A96E] text-xs mb-2 block">{p.cat}</span>
+                <span className="p-name text-3xl font-display italic">{p.name}</span>
+                <button onClick={handleSaveToVault} className="mt-8 btn-outline py-3 px-6 border-white/20 text-xs group/btn">
+                  Save Inspiration
                 </button>
               </div>
             </div>
