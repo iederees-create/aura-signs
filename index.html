@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aura Signs — Aesthetic Branding & Event Signage · Cape Town</title>
+  <meta name="description" content="Aura Signs is Cape Town's premium aesthetic branding and event signage studio. Custom acrylic, vinyl, large-format and bespoke signage for weddings, events and businesses." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <link rel="stylesheet" href="src/style.css" />
+</head>
+<body>
+
+  <!-- ───────────────────────────────────────── NAV ── -->
+  <nav id="site-nav">
+    <div class="nav-logo">AURA SIGNS</div>
+    <div class="bubble-menu" id="bubbleMenu">
+      <button class="bubble-trigger" id="bubbleTrigger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="bubble-pill" id="bubblePill">
+        <a href="#hero"      class="bubble-link" style="--hc:#C9603A">Home</a>
+        <a href="#services"  class="bubble-link" style="--hc:#7A8C6E">Services</a>
+        <a href="#portfolio" class="bubble-link" style="--hc:#E8DFD0">Portfolio</a>
+        <a href="#pricing"   class="bubble-link" style="--hc:#C9603A">Pricing</a>
+        <a href="#about"     class="bubble-link" style="--hc:#7A8C6E">About</a>
+        <a href="#contact"   class="bubble-link" style="--hc:#E8DFD0">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ─────────────────────────────────────── HERO ── -->
+  <section id="hero">
+    <!-- Spotlight canvas layer -->
+    <div id="spotlight-wrap">
+      <div id="hero-base">
+        <img src="https://picsum.photos/seed/signage-hero/1600/900" alt="Aura Signs hero" id="hero-img" />
+        <div id="hero-base-overlay"></div>
+      </div>
+      <div id="hero-reveal">
+        <img src="https://picsum.photos/seed/signage-install/1600/900" alt="Signage installation" id="reveal-img" />
+      </div>
+      <!-- SVG mask -->
+      <svg id="spotlight-svg" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="spotGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="white" stop-opacity="1"/>
+            <stop offset="80%"  stop-color="white" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="white" stop-opacity="0"/>
+          </radialGradient>
+          <mask id="spotMask">
+            <rect width="100%" height="100%" fill="black"/>
+            <circle id="spotCircle" cx="-500" cy="-500" r="460" fill="url(#spotGrad)"/>
+          </mask>
+        </defs>
+        <rect width="100%" height="100%" fill="transparent" mask="url(#spotMask)"/>
+      </svg>
+      <!-- Cursor trail -->
+      <div id="cursor-trail"></div>
+    </div>
+
+    <!-- Hero content -->
+    <div class="hero-content">
+      <p class="hero-eyebrow">Aesthetic Branding & Event Signage — Cape Town</p>
+      <h1 class="hero-headline">Signs That<br /><em>Say Something.</em></h1>
+      <div class="hero-ctas">
+        <a href="#portfolio" class="cta-primary">View Our Work</a>
+        <a href="https://wa.me/27600000000?text=Hi%20Aura%20Signs!%20I%27d%20love%20a%20quote." class="cta-ghost" target="_blank" rel="noopener">Get a Quote ↗</a>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ────────────────────────────────────── SERVICES ── -->
+  <section id="services">
+    <div class="section-label">What We Do</div>
+    <h2 class="section-title reveal-text">Crafted for<br /><em>Every Occasion</em></h2>
+
+    <div class="services-grid">
+      <div class="service-card" data-index="01">
+        <div class="service-num">01</div>
+        <div class="service-body">
+          <h3 class="service-name"><em>Event Signage</em></h3>
+          <p class="service-desc">Weddings, birthdays, celebrations — signs designed for moments that matter.</p>
+          <div class="service-tags">
+            <span>Weddings</span><span>Birthdays</span><span>Celebrations</span>
+          </div>
+        </div>
+        <div class="service-glow"></div>
+      </div>
+      <div class="service-card" data-index="02">
+        <div class="service-num">02</div>
+        <div class="service-body">
+          <h3 class="service-name"><em>Business Signage</em></h3>
+          <p class="service-desc">Menus, vinyl, retail displays — your brand, made visible with intention.</p>
+          <div class="service-tags">
+            <span>Menus</span><span>Vinyl</span><span>Retail</span>
+          </div>
+        </div>
+        <div class="service-glow"></div>
+      </div>
+      <div class="service-card" data-index="03">
+        <div class="service-num">03</div>
+        <div class="service-body">
+          <h3 class="service-name"><em>Custom Projects</em></h3>
+          <p class="service-desc">Acrylic, large format, bespoke — if you can dream it, we can sign it.</p>
+          <div class="service-tags">
+            <span>Acrylic</span><span>Large Format</span><span>Bespoke</span>
+          </div>
+        </div>
+        <div class="service-glow"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────── PORTFOLIO ── -->
+  <section id="portfolio">
+    <h2 class="portfolio-title reveal-text"><em>The Work</em></h2>
+
+    <div class="portfolio-filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="events">Events</button>
+      <button class="filter-btn" data-filter="business">Business</button>
+      <button class="filter-btn" data-filter="custom">Custom</button>
+    </div>
+
+    <div class="portfolio-grid" id="portfolioGrid">
+      <div class="portfolio-item" data-cat="events">
+        <img src="https://picsum.photos/seed/signage1/800/600" alt="Event signage" loading="lazy" />
+        <div class="portfolio-hover">
+          <span class="p-cat">Events</span>
+          <span class="p-name">The Venter Wedding</span>
+        </div>
+      </div>
+      <div class="portfolio-item tall" data-cat="business">
+        <img src="https://picsum.photos/seed/signage2/800/1000" alt="Business signage" loading="lazy" />
+        <div class="portfolio-hover">
+          <span class="p-cat">Business</span>
+          <span class="p-name">Café Lumière Menu Board</span>
+        </div>
+      </div>
+      <div class="portfolio-item" data-cat="custom">
+        <img src="https://picsum.photos/seed/signage3/800/600" alt="Custom acrylic" loading="lazy" />
+        <div class="portfolio-hover">
+          <span class="p-cat">Custom</span>
+          <span class="p-name">Acrylic Neon Installation</span>
+        </div>
+      </div>
+      <div class="portfolio-item" data-cat="events">
+        <img src="https://picsum.photos/seed/signage4/800/600" alt="Birthday signage" loading="lazy" />
+        <div class="portfolio-hover">
+          <span class="p-cat">Events</span>
+          <span class="p-name">Elegant 30th Celebration</span>
+        </div>
+      </div>
+      <div class="portfolio-item wide" data-cat="custom">
+        <img src="https://picsum.photos/seed/signage5/1200/600" alt="Large format" loading="lazy" />
+        <div class="portfolio-hover">
+          <span class="p-cat">Custom</span>
+          <span class="p-name">Large Format Retail Wrap</span>
+        </div>
+      </div>
+      <div class="portfolio-item" data-cat="business">
+        <img src="https://picsum.photos/seed/signage6/800/600" alt="Retail display" loading="lazy" />
+        <div class="portfolio-hover">
+          <span class="p-cat">Business</span>
+          <span class="p-name">Studio Nord Window Vinyl</span>
+        </div>
+      </div>
+      <div class="portfolio-item" data-cat="events">
+        <img src="https://picsum.photos/seed/signage7/800/600" alt="Wedding arch sign" loading="lazy" />
+        <div class="portfolio-hover">
+          <span class="p-cat">Events</span>
+          <span class="p-name">Arch Floral Welcome Sign</span>
+        </div>
+      </div>
+      <div class="portfolio-item" data-cat="custom">
+        <img src="https://picsum.photos/seed/signage8/800/600" alt="Bespoke sign" loading="lazy" />
+        <div class="portfolio-hover">
+          <span class="p-cat">Custom</span>
+          <span class="p-name">Bespoke Mirror Typography</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────── PRICING ── -->
+  <section id="pricing">
+    <div class="section-label">Transparent Pricing</div>
+    <h2 class="section-title reveal-text">Made for<br /><em>Every Budget</em></h2>
+
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-tier">Basic</div>
+        <div class="pricing-price"><em>R600</em><span>from</span></div>
+        <ul class="pricing-list">
+          <li>1–2 signage pieces</li>
+          <li>Standard fonts & colours</li>
+          <li>Small events only</li>
+          <li>48hr turnaround</li>
+          <li>Digital proof included</li>
+        </ul>
+        <a href="https://wa.me/27600000000?text=Hi%20Aura%20Signs!%20I%27m%20interested%20in%20the%20Basic%20package." class="pricing-cta" target="_blank">Get a Quote ↗</a>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Most Popular</div>
+        <div class="pricing-tier">Standard</div>
+        <div class="pricing-price"><em>R900</em><span>from</span></div>
+        <ul class="pricing-list">
+          <li>Full event package</li>
+          <li>Welcome + table + bar signs</li>
+          <li>Custom design consultation</li>
+          <li>24hr turnaround</li>
+          <li>Delivery in Cape Town</li>
+          <li>2 revision rounds</li>
+        </ul>
+        <a href="https://wa.me/27600000000?text=Hi%20Aura%20Signs!%20I%27m%20interested%20in%20the%20Standard%20package." class="pricing-cta pricing-cta-accent" target="_blank">Get a Quote ↗</a>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-tier">Premium</div>
+        <div class="pricing-price"><em>R2,500</em><span>from</span></div>
+        <ul class="pricing-list">
+          <li>Corporate & large format</li>
+          <li>Custom acrylic & bespoke</li>
+          <li>Unlimited revisions</li>
+          <li>Rush options available</li>
+          <li>Installation assistance</li>
+          <li>Brand kit alignment</li>
+        </ul>
+        <a href="https://wa.me/27600000000?text=Hi%20Aura%20Signs!%20I%27m%20interested%20in%20the%20Premium%20package." class="pricing-cta" target="_blank">Get a Quote ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────────────────────────────────────── ABOUT ── -->
+  <section id="about">
+    <div class="about-grid">
+      <div class="about-image-wrap">
+        <img src="https://picsum.photos/seed/studio-aura/700/900" alt="Aura Signs studio" class="about-img" />
+        <div class="about-img-accent"></div>
+      </div>
+      <div class="about-text">
+        <div class="section-label">Our Story</div>
+        <h2 class="section-title reveal-text"><em>Born from a Love<br />of Clean Design</em></h2>
+        <p class="about-body">Aura Signs grew from a simple belief — that signage should be as beautiful as the moments it marks. Based in Cape Town, we work at the intersection of craft and creativity, turning words and ideas into physical things people remember.</p>
+        <p class="about-body">Every piece we make is designed with intention. Whether it's a handwritten welcome board for a backyard celebration or an acrylic installation for a flagship store, we bring the same premium attention to detail.</p>
+        <p class="about-body">We are a small studio, and we like it that way. It means you work directly with us — from concept to collection.</p>
+        <div class="about-sig">— Aura Signs, Cape Town</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────── CONTACT ── -->
+  <section id="contact">
+    <h2 class="contact-title reveal-text">Let's Make<br /><em>Something Beautiful.</em></h2>
+    <p class="contact-sub">Tell us about your event or project and we'll get back to you within a few hours — usually via WhatsApp.</p>
+
+    <div class="contact-grid">
+      <div class="contact-wa">
+        <p class="wa-label">Fastest way to reach us</p>
+        <a href="https://wa.me/27600000000?text=Hi%20Aura%20Signs!%20I%27d%20love%20to%20chat%20about%20a%20project." class="wa-button" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Chat on WhatsApp
+        </a>
+        <p class="wa-note">Monday–Saturday · 8am–6pm · Cape Town, SA</p>
+      </div>
+
+      <form class="contact-form" id="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" placeholder="Sarah & James" required />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" placeholder="083 000 0000" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="event-date">Event / Project Date</label>
+          <input type="date" id="event-date" />
+        </div>
+        <div class="form-group">
+          <label for="details">Tell Us About Your Project</label>
+          <textarea id="details" rows="5" placeholder="e.g. Wedding in Franschhoek, 120 guests — need welcome sign, seating chart and bar menu…"></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send Enquiry</button>
+        <p class="form-note" id="formNote"></p>
+      </form>
+    </div>
+
+    <div class="contact-footer">
+      <a href="https://instagram.com/aurasigns" target="_blank" class="ig-handle" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        @aurasigns
+      </a>
+    </div>
+  </section>
+
+  <!-- ───────────────────────────── FIXED ELEMENTS ── -->
+  <!-- WhatsApp floating button -->
+  <a href="https://wa.me/27600000000?text=Hi%20Aura%20Signs!%20I%27d%20love%20a%20quote." class="wa-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <script src="src/main.js"></script>
+</body>
+</html>
