@@ -121,7 +121,7 @@ export default function Auth() {
                 }}
                 className="text-xs uppercase tracking-widest text-[#E8DFD0]/50 hover:text-[#E8DFD0] transition-colors"
               >
-                {isSignUp ? "Already a member? Sign In" : "Request Vault Access"}
+                {isSignUp ? "Already a member? Sign In" : "Don't have an account? Sign Up"}
               </button>
               
               {!isResetting && !isSignUp && (
