@@ -3,6 +3,7 @@ import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import Auth from "./pages/Auth";
 import Vault from "./pages/Vault";
+import Admin from "./pages/Admin";
 
 export default function App() {
   return (
@@ -11,6 +12,7 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/vault" element={<Vault />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </Router>
   );

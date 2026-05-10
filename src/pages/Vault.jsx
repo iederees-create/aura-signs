@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Download, LayoutDashboard, Heart, Settings, LogOut, FileText, FolderKanban } from "lucide-react";
+import { Download, LayoutDashboard, Heart, Settings, LogOut, FileText, FolderKanban, ArrowRight, Loader2 } from "lucide-react";
 
 export default function Vault() {
   const navigate = useNavigate();

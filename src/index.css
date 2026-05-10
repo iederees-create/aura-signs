@@ -14,7 +14,17 @@
 }
 
 .glass-panel {
-  @apply bg-[#151512]/80 backdrop-blur-md border border-[#E8DFD0]/10 shadow-2xl;
+  @apply bg-[#E8DFD0]/[0.02] backdrop-blur-xl border border-[#E8DFD0]/10;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 12s linear infinite;
 }
 
 .btn-primary {
