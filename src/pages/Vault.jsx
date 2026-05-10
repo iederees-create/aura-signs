@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { Download, LayoutDashboard, Heart, Settings, LogOut, FileText, FolderKanban } from "lucide-react";
 
 export default function Vault() {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState("vault");
 
   const mockProject = {
