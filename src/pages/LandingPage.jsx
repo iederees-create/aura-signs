@@ -7,6 +7,14 @@ export default function LandingPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('events');
 
+  const scrollTo = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+    setIsMobileMenuOpen(false);
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -38,12 +46,12 @@ export default function LandingPage() {
     <div className="landing-page-wrapper">
       {/* NAV */}
       <nav id="main-nav" className={`landing-nav ${isScrolled ? 'scrolled' : ''}`}>
-        <Link to="/" className="nav-logo">Bespo<span>k</span>e</Link>
+        <Link to="/" className="nav-logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Bespo<span>k</span>e</Link>
         <ul className="nav-links">
-          <li><Link to="/" className="active">Home</Link></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#gallery">Gallery</a></li>
-          <li><a href="#about">About</a></li>
+          <li><Link to="/" className="active" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Home</Link></li>
+          <li><button onClick={() => scrollTo('services')} className="nav-link-btn">Services</button></li>
+          <li><button onClick={() => scrollTo('gallery')} className="nav-link-btn">Gallery</button></li>
+          <li><button onClick={() => scrollTo('about')} className="nav-link-btn">About</button></li>
           <li><Link to="/auth">My Projects</Link></li>
           <li><Link to="/auth?signup=true" className="nav-cta">Get a quote</Link></li>
         </ul>
@@ -57,10 +65,10 @@ export default function LandingPage() {
       </nav>
 
       <div className={`mobile-nav ${isMobileMenuOpen ? 'open' : ''}`} id="mobile-nav">
-        <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
-        <a href="#services" onClick={() => setIsMobileMenuOpen(false)}>Services</a>
-        <a href="#gallery" onClick={() => setIsMobileMenuOpen(false)}>Gallery</a>
-        <a href="#about" onClick={() => setIsMobileMenuOpen(false)}>About</a>
+        <Link to="/" onClick={() => { setIsMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>Home</Link>
+        <button onClick={() => scrollTo('services')}>Services</button>
+        <button onClick={() => scrollTo('gallery')}>Gallery</button>
+        <button onClick={() => scrollTo('about')}>About</button>
         <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>My Projects</Link>
         <Link to="/auth?signup=true" onClick={() => setIsMobileMenuOpen(false)}>Get a quote</Link>
       </div>
