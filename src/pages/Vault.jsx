@@ -236,7 +236,7 @@ export default function Vault() {
             <h1 className="text-5xl font-serif font-light mb-4">
               {activeTab === 'vault' ? 'Project Vault' : 'Your Signage Project'}
             </h1>
-            <p className="text-[#E8DFD0]/40 font-light text-lg italic">
+            <p className="text-[#E8DFD0]/70 font-light text-lg italic">
               {activeTab === 'vault' ? 'Exclusive resources for your Cape Town projects.' : `Order ${mockProject.id} · ${mockProject.package}`}
             </p>
           </div>

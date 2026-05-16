@@ -65,7 +65,7 @@ export default function Auth() {
             <h2 className="text-3xl font-serif font-light mb-2 text-[#E8DFD0]">
               {isResetting ? "Reset Password" : (isSignUp ? "Project Vault" : "Welcome Back")}
             </h2>
-            <p className="text-[#E8DFD0]/60 text-sm font-light">
+            <p className="text-[#E8DFD0]/80 text-sm font-light">
               {isResetting ? "Enter your email to receive a secure reset link." : (isSignUp ? "Access your custom projects, inspirations, and design proofs." : "Sign in to access your dashboard and inspirations.")}
             </p>
           </div>
