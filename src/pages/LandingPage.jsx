@@ -1,296 +1,447 @@
-import React, { useLayoutEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Heart } from "lucide-react";
-
-gsap.registerPlugin(ScrollTrigger);
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import './landing-page.css';
 
 export default function LandingPage() {
-  const container = useRef(null);
-  const navigate = useNavigate();
-  const [filter, setFilter] = useState("all");
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('events');
 
-  const [showUnlockModal, setShowUnlockModal] = useState(false);
-  const [activeTooltip, setActiveTooltip] = useState(null);
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
 
-  const portfolioItems = [
-    { id: 1, cat: "events", name: "The Venter Wedding", img: "https://picsum.photos/seed/signage1/800/600", className: "" },
-    { id: 2, cat: "business", name: "Café Lumière Menu Board", img: "https://picsum.photos/seed/signage2/800/1000", className: "tall" },
-    { id: 3, cat: "custom", name: "Acrylic Neon Installation", img: "https://picsum.photos/seed/signage3/800/600", className: "" },
-    { id: 4, cat: "events", name: "Elegant 30th Celebration", img: "https://picsum.photos/seed/signage4/800/600", className: "" },
-    { id: 5, cat: "custom", name: "Large Format Retail Wrap", img: "https://picsum.photos/seed/signage5/1200/600", className: "wide" },
-    { id: 6, cat: "business", name: "Studio Nord Window Vinyl", img: "https://picsum.photos/seed/signage6/800/600", className: "" },
-    { id: 7, cat: "events", name: "Arch Floral Welcome Sign", img: "https://picsum.photos/seed/signage7/800/600", className: "" },
-    { id: 8, cat: "custom", name: "Bespoke Mirror Typography", img: "https://picsum.photos/seed/signage8/800/600", className: "" }
-  ];
-
-  useLayoutEffect(() => {
-    let ctx = gsap.context(() => {
-      // 1. HERO ENTRANCE (Editorial Reveal)
-      const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-      tl.to('.hero-headline', { clipPath: 'inset(0 0% 0 0)', duration: 1.5, delay: 0.5 })
-        .to('.hero-eyebrow', { opacity: 1, y: 0, duration: 1 }, '-=1')
-        .to('.hero-ctas', { opacity: 1, y: 0, duration: 1 }, '-=0.8');
-
-      // 2. SPOTLIGHT (High Precision)
-      const circle = document.getElementById('spotCircle');
-      const heroWrap = document.getElementById('spotlight-wrap');
-      
-      if (heroWrap && circle) {
-        let mx = -1000, my = -1000;
-        let cx = -1000, cy = -1000;
-
-        heroWrap.addEventListener('mousemove', (e) => {
-          const rect = heroWrap.getBoundingClientRect();
-          mx = e.clientX - rect.left;
-          my = e.clientY - rect.top;
+    // Intersection Observer for reveal animations
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
         });
+      },
+      { threshold: 0.1 }
+    );
 
-        gsap.ticker.add(() => {
-          cx += (mx - cx) * 0.08;
-          cy += (my - cy) * 0.08;
-          circle.setAttribute('cx', cx);
-          circle.setAttribute('cy', cy);
-        });
-      }
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 
-      // 4. SCROLL REVEALS
-      gsap.utils.toArray('.reveal-text').forEach(el => {
-        gsap.fromTo(el,
-          { clipPath: 'inset(0 100% 0 0)', y: 20 },
-          { clipPath: 'inset(0 0% 0 0)', y: 0, duration: 1.5, ease: 'power4.inOut', scrollTrigger: { trigger: el, start: 'top 85%' } }
-        );
-      });
-    }, container);
-
-    return () => ctx.revert();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
+    };
   }, []);
 
-  const handleSaveToVault = (e) => {
-    e.preventDefault();
-    setShowUnlockModal(true);
-  };
-
   return (
-    <div ref={container} className="bg-[#080806]">
-      {/* Vault Unlock Modal */}
-      {showUnlockModal && (
-        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-6">
-          <div className="absolute inset-0 bg-[#080806]/90 backdrop-blur-xl" onClick={() => setShowUnlockModal(false)} />
-          <div className="glass-panel max-w-lg w-full p-12 relative z-10 text-center border-[#E8DFD0]/20">
-            <Heart size={48} className="mx-auto mb-8 text-[#E8DFD0] animate-pulse" />
-            <h2 className="text-4xl font-display font-semibold mb-4 text-[#E8DFD0]">Unlock The Bridal Vault</h2>
-            <p className="text-[#E8DFD0]/60 font-light mb-10 leading-relaxed text-lg">
-              Save your favorite inspirations, access our Signage Master Checklist, and track your custom project from design to delivery.
-            </p>
-            <div className="flex flex-col gap-4">
-              <Link to="/auth?signup=true" className="btn-primary py-5">Create My Vault</Link>
-              <button onClick={() => setShowUnlockModal(false)} className="text-[#E8DFD0]/40 uppercase tracking-widest text-xs hover:text-[#E8DFD0] transition-colors">Maybe Later</button>
-            </div>
-          </div>
-        </div>
-      )}
-
+    <div className="landing-page-wrapper">
       {/* NAV */}
-      <nav id="site-nav">
-        <div className="nav-logo">AURA SIGNS</div>
-        <div className="bubble-menu" id="bubbleMenu">
-          <button className="bubble-trigger" onClick={() => setMenuOpen(!menuOpen)}>
-            <div className="flex gap-1">
-              <span className={`w-1 h-1 rounded-full bg-[#E8DFD0] transition-all ${menuOpen ? 'scale-150' : ''}`} />
-              <span className={`w-1 h-1 rounded-full bg-[#E8DFD0] transition-all ${menuOpen ? 'scale-150' : ''}`} />
-              <span className={`w-1 h-1 rounded-full bg-[#E8DFD0] transition-all ${menuOpen ? 'scale-150' : ''}`} />
-            </div>
-          </button>
-          <div className={`bubble-pill ${menuOpen ? 'open' : ''}`}>
-            <button onClick={() => scrollTo('hero')} className="bubble-link" style={{ '--hc': '#C9603A' }}>Home</button>
-            <button onClick={() => scrollTo('services')} className="bubble-link" style={{ '--hc': '#7A8C6E' }}>Services</button>
-            <button onClick={() => scrollTo('portfolio')} className="bubble-link" style={{ '--hc': '#E8DFD0' }}>Portfolio</button>
-            <Link to="/auth" className="bubble-link" style={{ '--hc': '#C9A96E' }}>The Vault</Link>
-          </div>
-        </div>
+      <nav id="main-nav" className={`landing-nav ${isScrolled ? 'scrolled' : ''}`}>
+        <Link to="/" className="nav-logo">Bespo<span>k</span>e</Link>
+        <ul className="nav-links">
+          <li><Link to="/" className="active">Home</Link></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#about">About</a></li>
+          <li><Link to="/auth">My Projects</Link></li>
+          <li><Link to="/auth?signup=true" className="nav-cta">Get a quote</Link></li>
+        </ul>
+        <button 
+          className="nav-hamburger" 
+          aria-label="Open menu" 
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          <span></span><span></span><span></span>
+        </button>
       </nav>
 
+      <div className={`mobile-nav ${isMobileMenuOpen ? 'open' : ''}`} id="mobile-nav">
+        <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
+        <a href="#services" onClick={() => setIsMobileMenuOpen(false)}>Services</a>
+        <a href="#gallery" onClick={() => setIsMobileMenuOpen(false)}>Gallery</a>
+        <a href="#about" onClick={() => setIsMobileMenuOpen(false)}>About</a>
+        <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>My Projects</Link>
+        <Link to="/auth?signup=true" onClick={() => setIsMobileMenuOpen(false)}>Get a quote</Link>
+      </div>
+
       {/* HERO */}
-      <section id="hero">
-        <div id="spotlight-wrap">
-          <div id="hero-base">
-            <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=2000" alt="Aura Signs hero" id="hero-img" />
-            <div id="hero-base-overlay"></div>
+      <section className="hero" style={{ padding: 0 }}>
+        <div className="hero-left">
+          <p className="hero-eyebrow">Cape Town · Signage & Event Styling</p>
+          <h1 className="hero-headline">
+            Every occasion,<br /><em>beautifully</em><br />signed.
+          </h1>
+          <p className="hero-sub">
+            Custom signage, event styling, and business branding — designed and produced to leave a lasting impression.
+          </p>
+          <div className="hero-actions">
+            <a href="https://wa.me/27000000000?text=Hi%2C%20I%20found%20you%20on%20your%20website%20and%20I%27d%20like%20a%20quote" target="_blank" rel="noopener noreferrer" className="btn-primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.555 4.126 1.526 5.864L.053 23.27a.75.75 0 00.917.928l5.521-1.448A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.712 9.712 0 01-4.944-1.352l-.354-.211-3.674.964.979-3.567-.231-.368A9.714 9.714 0 012.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg>
+              WhatsApp us
+            </a>
+            <a href="#gallery" className="btn-ghost">
+              View our work
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
           </div>
-          <div id="hero-reveal">
-            <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&q=80&w=2000" alt="Signage installation" id="reveal-img" />
-          </div>
-          <svg id="spotlight-svg" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <radialGradient id="spotGrad" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="white" stopOpacity="1"/>
-                <stop offset="60%" stopColor="white" stopOpacity="0.8"/>
-                <stop offset="100%" stopColor="white" stopOpacity="0"/>
-              </radialGradient>
-              <mask id="spotMask">
-                <rect width="100%" height="100%" fill="black"/>
-                <circle id="spotCircle" cx="-1000" cy="-1000" r="500" fill="url(#spotGrad)"/>
-              </mask>
-            </defs>
-            <rect width="100%" height="100%" fill="transparent" mask="url(#spotMask)"/>
-          </svg>
         </div>
-        <div className="hero-content">
-          <p className="hero-eyebrow opacity-0 translate-y-4">Premium Wedding & Event Signage — Cape Town</p>
-          <h1 className="hero-headline" style={{ clipPath: 'inset(0 100% 0 0)' }}>Signs That<br /><em>Say Something.</em></h1>
-          <div className="hero-ctas flex flex-col sm:flex-row items-center gap-6 mt-12 opacity-0 translate-y-4">
-            <button onClick={() => scrollTo('portfolio')} className="btn-primary px-12">Explore Portfolio</button>
-            <Link to="/auth?signup=true" className="btn-outline px-12 border-[#E8DFD0]/40">Unlock The Vault</Link>
+
+        <div className="hero-right">
+          <div className="hero-image-grid">
+            <div className="hero-img-cell">
+              <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=600&q=80" alt="Acrylic wedding welcome sign" />
+              <span className="hero-label">Wedding signage</span>
+            </div>
+            <div className="hero-img-cell">
+              <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&q=80" alt="Elegant table settings" />
+              <span className="hero-label">Event styling</span>
+            </div>
+            <div className="hero-img-cell">
+              <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=400&q=80" alt="Business acrylic signage" />
+              <span className="hero-label">Business branding</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* TRUST STRIP */}
+      <div className="trust-strip">
+        <div className="trust-item">
+          <svg className="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <div className="trust-text">
+            <p>Custom Design</p>
+            <span>Tailored to your vision</span>
+          </div>
+        </div>
+        <div className="trust-item">
+          <svg className="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+          <div className="trust-text">
+            <p>Premium Finishes</p>
+            <span>Acrylic, mirror, vinyl & more</span>
+          </div>
+        </div>
+        <div className="trust-item">
+          <svg className="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M8 17l4 4 4-4m-4-5v9M3 8l9-5 9 5M3 8v8l9 5 9-5V8"/></svg>
+          <div className="trust-text">
+            <p>Delivery & Install</p>
+            <span>Cape Town & surrounds</span>
+          </div>
+        </div>
+        <div className="trust-item">
+          <svg className="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          <div className="trust-text">
+            <p>All Occasions</p>
+            <span>Weddings, events & business</span>
+          </div>
+        </div>
+      </div>
+
+      {/* ABOUT */}
+      <section id="about" className="about landing-section reveal">
+        <div className="about-inner">
+          <div className="about-visual">
+            <img className="about-visual-img"
+                 src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=600&q=80"
+                 alt="Premium acrylic signage detail" />
+            <div className="about-accent"></div>
+            <div className="about-tag">Est. Cape Town</div>
+          </div>
+          <div className="about-content">
+            <p className="section-label">About Bespoke</p>
+            <h2 className="section-headline">Creative signage<br />with a <em>premium</em> touch</h2>
+            <p className="section-body">
+              We specialise in modern, elegant, and fully customised signage for events and businesses of all sizes. From intimate celebrations to large corporate activations, every piece is designed and produced to reflect your vision — with the quality to match.
+            </p>
+            <p className="section-body" style={{ marginTop: '1rem' }}>
+              We handle everything from concept and design through to production, delivery, and installation — making the process simple and stress-free.
+            </p>
+            <div className="about-stats">
+              <div className="stat-block">
+                <p>100+</p>
+                <span>Projects completed</span>
+              </div>
+              <div className="stat-block">
+                <p>2</p>
+                <span>Service categories</span>
+              </div>
+              <div className="stat-block">
+                <p>1</p>
+                <span>City — Cape Town</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* SERVICES */}
-      <section id="services" className="py-32">
-        <div className="section-label text-center">Our Expertise</div>
-        <h2 className="section-title reveal-text text-center">Crafted for<br /><em>Memorable Moments</em></h2>
-        <div className="services-grid max-w-6xl mx-auto">
-          {[
-            { num: '01', title: 'Event Signage', desc: 'From minimal welcome boards to intricate seating charts that guide your guests with grace.', tags: ['Weddings', 'Celebrations'] },
-            { num: '02', title: 'Business Branding', desc: 'Elevate your commercial space with custom vinyl, menu boards, and retail installations.', tags: ['Retail', 'Corporate'] },
-            { num: '03', title: 'Bespoke Projects', desc: 'If you have a unique vision in acrylic, mirror, or wood, we bring it to life.', tags: ['Acrylic', 'Mirror', 'Bespoke'] }
-          ].map((s) => (
-            <div key={s.num} className="service-card group border-[#E8DFD0]/5 hover:border-[#E8DFD0]/20 transition-all duration-500">
-              <div className="service-num opacity-20 group-hover:opacity-40 transition-opacity">{s.num}</div>
-              <div className="relative z-10">
-                <h3 className="service-name text-3xl mb-4"><em>{s.title}</em></h3>
-                <p className="service-desc text-[#E8DFD0]/50 mb-8">{s.desc}</p>
-                <div className="service-tags">
-                  {s.tags.map(t => <span key={t} className="border-[#E8DFD0]/10 text-xs px-3 py-1 uppercase tracking-widest">{t}</span>)}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* PORTFOLIO */}
-      <section id="portfolio" className="py-24 px-8">
-        <h2 className="portfolio-title reveal-text mb-16"><em>The Work</em></h2>
-        <div className="portfolio-filters flex justify-center mb-16">
-          {['all', 'events', 'business', 'custom'].map(f => (
-            <button key={f} className={`filter-btn mx-2 ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
-              {f.charAt(0).toUpperCase() + f.slice(1)}
-            </button>
-          ))}
-        </div>
-        <div className="portfolio-grid max-w-[1800px] mx-auto">
-          {portfolioItems.map((p) => (
-            <div 
-              key={p.id} 
-              className={`portfolio-item ${p.className} relative group cursor-none`} 
-              data-cat={p.cat}
-              onMouseEnter={() => setActiveTooltip(p.id)}
-              onMouseLeave={() => setActiveTooltip(null)}
+      <section id="services" className="services landing-section reveal">
+        <div className="services-header">
+          <div>
+            <p className="section-label">What we offer</p>
+            <h2 className="section-headline" style={{ marginBottom: 0 }}>Our services</h2>
+          </div>
+          <div className="services-tabs">
+            <button 
+              className={`tab-btn ${activeTab === 'events' ? 'active' : ''}`} 
+              onClick={() => setActiveTab('events')}
             >
-              <img src={p.img} alt={p.name} loading="lazy" className="grayscale group-hover:grayscale-0 transition-all duration-700" />
-              
-              {/* Guest Save Hint */}
-              {activeTooltip === p.id && (
-                <div className="absolute top-4 left-4 z-50 bg-[#E8DFD0] text-[#080806] px-4 py-2 text-[10px] uppercase tracking-widest font-bold flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                  <Heart size={12} fill="currentColor" /> Save to Vault
-                </div>
-              )}
+              Weddings & Events
+            </button>
+            <button 
+              className={`tab-btn ${activeTab === 'business' ? 'active' : ''}`} 
+              onClick={() => setActiveTab('business')}
+            >
+              Business Branding
+            </button>
+          </div>
+        </div>
 
-              <div className="portfolio-hover p-12 bg-gradient-to-t from-[#080806] via-[#080806]/40 to-transparent">
-                <span className="p-cat text-[#C9A96E] text-xs mb-2 block">{p.cat}</span>
-                <span className="p-name text-3xl font-display italic">{p.name}</span>
-                <button onClick={handleSaveToVault} className="mt-8 btn-outline py-3 px-6 border-white/20 text-xs group/btn">
-                  Save Inspiration
-                </button>
-              </div>
+        {activeTab === 'events' ? (
+          <div className="services-grid" id="services-events">
+            <div className="service-card">
+              <svg className="service-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              <h3>Wedding Signage</h3>
+              <p>Welcome boards, seating charts, table numbers, ceremony signs, and personalised acrylic displays — all designed to match your theme.</p>
+              <a href="#contact" className="service-card-link">Learn more →</a>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* PRICING */}
-      <section id="pricing">
-        <div className="section-label">Transparent Pricing</div>
-        <h2 className="section-title reveal-text">Made for<br /><em>Every Budget</em></h2>
-        <div className="pricing-grid">
-          <div className="pricing-card">
-            <div className="pricing-tier">Basic</div>
-            <div className="pricing-price"><em>R600</em><span>from</span></div>
-            <ul className="pricing-list">
-              <li>1–2 signage pieces</li><li>Standard fonts & colours</li><li>Small events only</li><li>48hr turnaround</li><li>Digital proof included</li>
-            </ul>
-            <a href="https://wa.me/27600000000?text=Hi%20Aura%20Signs!%20I%27m%20interested%20in%20the%20Basic%20package." className="pricing-cta" target="_blank" rel="noreferrer">Get a Quote ↗</a>
-          </div>
-          <div className="pricing-card featured">
-            <div className="pricing-badge">Most Popular</div>
-            <div className="pricing-tier">Standard</div>
-            <div className="pricing-price"><em>R900</em><span>from</span></div>
-            <ul className="pricing-list">
-              <li>Full event package</li><li>Welcome + table + bar signs</li><li>Custom design consultation</li><li>24hr turnaround</li><li>Delivery in Cape Town</li><li>2 revision rounds</li>
-            </ul>
-            <a href="https://wa.me/27600000000?text=Hi%20Aura%20Signs!%20I%27m%20interested%20in%20the%20Standard%20package." className="pricing-cta pricing-cta-accent" target="_blank" rel="noreferrer">Get a Quote ↗</a>
-          </div>
-          <div className="pricing-card">
-            <div className="pricing-tier">Premium</div>
-            <div className="pricing-price"><em>R2,500</em><span>from</span></div>
-            <ul className="pricing-list">
-              <li>Corporate & large format</li><li>Custom acrylic & bespoke</li><li>Unlimited revisions</li><li>Rush options available</li><li>Installation assistance</li><li>Brand kit alignment</li>
-            </ul>
-            <a href="https://wa.me/27600000000?text=Hi%20Aura%20Signs!%20I%27m%20interested%20in%20the%20Premium%20package." className="pricing-cta" target="_blank" rel="noreferrer">Get a Quote ↗</a>
-          </div>
-        </div>
-      </section>
-
-      {/* ABOUT */}
-      <section id="about">
-        <div className="about-grid">
-          <div className="about-image-wrap">
-            <img src="https://picsum.photos/seed/studio-aura/700/900" alt="Aura Signs studio" className="about-img" />
-            <div className="about-img-accent"></div>
-          </div>
-          <div className="about-text">
-            <div className="section-label">Our Story</div>
-            <h2 className="section-title reveal-text"><em>Born from a Love<br />of Clean Design</em></h2>
-            <p className="about-body">Aura Signs grew from a simple belief — that signage should be as beautiful as the moments it marks. Based in Cape Town, we work at the intersection of craft and creativity, turning words and ideas into physical things people remember.</p>
-            <p className="about-body">Every piece we make is designed with intention. Whether it's a handwritten welcome board for a backyard celebration or an acrylic installation for a flagship store, we bring the same premium attention to detail.</p>
-            <p className="about-body">We are a small studio, and we like it that way. It means you work directly with us — from concept to collection.</p>
-            <div className="about-sig">— Aura Signs, Cape Town</div>
-          </div>
-        </div>
-      </section>
-
-      {/* CONTACT */}
-      <section id="contact">
-        <h2 className="contact-title reveal-text">Let's Make<br /><em>Something Beautiful.</em></h2>
-        <p className="contact-sub">Tell us about your event or project and we'll get back to you within a few hours.</p>
-        <div className="contact-grid">
-          <div className="contact-wa">
-            <p className="wa-label">Fastest way to reach us</p>
-            <a href="https://wa.me/27600000000?text=Hi" className="wa-button" target="_blank" rel="noreferrer">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              Chat on WhatsApp
-            </a>
-            <p className="wa-note">Monday–Saturday · 8am–6pm · Cape Town, SA</p>
-          </div>
-          <form className="contact-form" onSubmit={(e) => { e.preventDefault(); alert("Use WhatsApp for MVP!"); }}>
-            <div className="form-row">
-              <div className="form-group"><label>Your Name</label><input type="text" placeholder="Sarah & James" /></div>
-              <div className="form-group"><label>Phone</label><input type="tel" placeholder="083 000 0000" /></div>
+            <div className="service-card">
+              <svg className="service-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01m-.01 4h.01"/></svg>
+              <h3>Seating Charts</h3>
+              <p>Elegant acrylic, mirror, vinyl, and printed seating charts for weddings, corporate events, birthdays, and private functions.</p>
+              <a href="#contact" className="service-card-link">Learn more →</a>
             </div>
-            <div className="form-group"><label>Event Date</label><input type="date" /></div>
-            <div className="form-group"><label>Details</label><textarea rows="5" placeholder="e.g. Wedding in Franschhoek..."></textarea></div>
-            <button type="submit" className="form-submit">Send Enquiry</button>
-          </form>
+            <div className="service-card">
+              <svg className="service-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 8v4l3 3"/></svg>
+              <h3>Mirror & Vinyl Signage</h3>
+              <p>Luxury mirror welcome signs, custom vinyl lettering, window decals, and wall graphics for a dramatic, high-end effect.</p>
+              <a href="#contact" className="service-card-link">Learn more →</a>
+            </div>
+            <div className="service-card">
+              <svg className="service-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              <h3>Wedding Stationery</h3>
+              <p>Invitations, menus, thank you cards, name cards, programs, and envelope printing — beautifully designed for your day.</p>
+              <a href="#contact" className="service-card-link">Learn more →</a>
+            </div>
+            <div className="service-card">
+              <svg className="service-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+              <h3>Event Backdrops & Hire</h3>
+              <p>Backdrop board hire, aisle hire, vinyl personalisation, and complete styling setups for weddings, birthdays, and activations.</p>
+              <a href="#contact" className="service-card-link">Learn more →</a>
+            </div>
+            <div className="service-card">
+              <svg className="service-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="12" cy="12" r="2"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4m-3.5-7.5l-2.83 2.83M8.33 15.67l-2.83 2.83m0-14.14l2.83 2.83M15.67 15.67l2.83 2.83"/></svg>
+              <h3>Balloon Garlands</h3>
+              <p>Custom balloon installations for weddings, birthdays, corporate launches, baby showers, and brand activations.</p>
+              <a href="#contact" className="service-card-link">Learn more →</a>
+            </div>
+          </div>
+        ) : (
+          <div className="services-grid" id="services-business">
+            <div className="service-card">
+              <svg className="service-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              <h3>Acrylic Displays & Signage</h3>
+              <p>Reception signs, logo displays, menu boards, counter displays, and promotional signage for retail, salons, cafés, and offices.</p>
+              <a href="#contact" className="service-card-link">Learn more →</a>
+            </div>
+            <div className="service-card">
+              <svg className="service-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M12 12h4m-4 4h4M8 12h.01M8 16h.01"/></svg>
+              <h3>Business Cards</h3>
+              <p>Professionally designed and printed cards in matte, gloss, rounded corners, and luxury finishes that make an impression.</p>
+              <a href="#contact" className="service-card-link">Learn more →</a>
+            </div>
+            <div className="service-card">
+              <svg className="service-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M7 7h10v10H7zM7 7L5 5M17 7l2-2M7 17l-2 2M17 17l2 2"/></svg>
+              <h3>Stickers & Packaging</h3>
+              <p>Product labels, packaging stickers, thank you stickers, branded packaging, and custom vinyl labels to elevate your brand.</p>
+              <a href="#contact" className="service-card-link">Learn more →</a>
+            </div>
+            <div className="service-card">
+              <svg className="service-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197"/></svg>
+              <h3>QR Code Signs</h3>
+              <p>Acrylic QR signs for reviews, social media, and payments. Perfect for cafés, salons, retail, and any customer-facing business.</p>
+              <a href="#contact" className="service-card-link">Learn more →</a>
+            </div>
+            <div className="service-card">
+              <svg className="service-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
+              <h3>Window & Vinyl Decals</h3>
+              <p>Custom window graphics, wall vinyl, and branded decals for shopfronts, offices, studios, and any business space.</p>
+              <a href="#contact" className="service-card-link">Learn more →</a>
+            </div>
+            <div className="service-card">
+              <svg className="service-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              <h3>Design & Production</h3>
+              <p>End-to-end service: concept design, production, delivery, and professional installation with attention to every detail.</p>
+              <a href="#contact" className="service-card-link">Learn more →</a>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* GALLERY */}
+      <section id="gallery" className="gallery reveal landing-section">
+        <p className="section-label">Our work</p>
+        <h2 className="section-headline">Elegant details.<br /><em>Memorable</em> setups.</h2>
+
+        <div className="gallery-masonry">
+          <div className="gallery-item">
+            <div className="gallery-item-inner" style={{ aspectRatio: '3/4' }}>
+              <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=500&q=75" alt="Acrylic wedding seating chart" />
+            </div>
+            <div className="gallery-item-caption">Seating chart · Wedding</div>
+          </div>
+          <div className="gallery-item">
+            <div className="gallery-item-inner" style={{ aspectRatio: '4/3' }}>
+              <img src="https://images.unsplash.com/photo-1467810563316-b5476525c0f9?w=500&q=75" alt="Event backdrop setup" />
+            </div>
+            <div className="gallery-item-caption">Backdrop · Event styling</div>
+          </div>
+          <div className="gallery-item">
+            <div className="gallery-item-inner" style={{ aspectRatio: '1/1' }}>
+              <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=500&q=75" alt="Business acrylic signage" />
+            </div>
+            <div className="gallery-item-caption">Acrylic sign · Business</div>
+          </div>
+          <div className="gallery-item">
+            <div className="gallery-item-inner" style={{ aspectRatio: '3/4' }}>
+              <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500&q=75" alt="Balloon garland installation" />
+            </div>
+            <div className="gallery-item-caption">Balloon garland · Birthday</div>
+          </div>
+          <div className="gallery-item">
+            <div className="gallery-item-inner" style={{ aspectRatio: '4/3' }}>
+              <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=500&q=75" alt="Wedding table numbers" />
+            </div>
+            <div className="gallery-item-caption">Table numbers · Wedding</div>
+          </div>
+          <div className="gallery-item">
+            <div className="gallery-item-inner" style={{ aspectRatio: '1/1' }}>
+              <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&q=75" alt="Custom stickers and packaging" />
+            </div>
+            <div className="gallery-item-caption">Stickers · Packaging</div>
+          </div>
+        </div>
+
+        <div className="gallery-footer">
+          <Link to="/auth" className="btn-outline-ivory">
+            View full gallery
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </Link>
         </div>
       </section>
 
-      {/* Floating WA */}
-      <a href="https://wa.me/27600000000" className="wa-float" target="_blank" rel="noreferrer" aria-label="Chat on WhatsApp">
-        <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      {/* TESTIMONIALS */}
+      <section className="testimonials reveal landing-section">
+        <p className="section-label">Client love</p>
+        <h2 className="section-headline">What our clients say</h2>
+
+        <div className="testimonials-grid">
+          <div className="testimonial-card">
+            <div className="testimonial-stars">
+              {[...Array(5)].map((_, i) => <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>)}
+            </div>
+            <p className="testimonial-quote">"Professional, creative, and beautiful quality from start to finish. Our venue looked absolutely incredible."</p>
+            <p className="testimonial-author">Aisha M.</p>
+            <p className="testimonial-service">Wedding Signage & Seating Chart</p>
+          </div>
+          <div className="testimonial-card">
+            <div className="testimonial-stars">
+              {[...Array(5)].map((_, i) => <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>)}
+            </div>
+            <p className="testimonial-quote">"The acrylic business signs and stickers gave our brand such a premium look. Clients notice immediately."</p>
+            <p className="testimonial-author">Lena K.</p>
+            <p className="testimonial-service">Acrylic Signage & Product Stickers</p>
+          </div>
+          <div className="testimonial-card">
+            <div className="testimonial-stars">
+              {[...Array(5)].map((_, i) => <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>)}
+            </div>
+            <p className="testimonial-quote">"Quick, professional, and the end result was stunning. The balloon garland and backdrop made our event so special."</p>
+            <p className="testimonial-author">Priya D.</p>
+            <p className="testimonial-service">Balloon Garland & Event Backdrop</p>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA BANNER */}
+      <div id="contact" className="cta-banner reveal landing-section">
+        <div>
+          <p className="section-label">Ready to start?</p>
+          <h2 className="section-headline">Let's bring your<br /><em>vision</em> to life</h2>
+          <p className="section-body">Looking for custom signage, event styling, or business branding? Get in touch for a personalised quote.</p>
+        </div>
+        <div className="cta-actions">
+          <a href="https://wa.me/27000000000?text=Hi%2C%20I%20found%20you%20on%20your%20website%20and%20I%27d%20like%20a%20quote" target="_blank" rel="noopener noreferrer" className="btn-whatsapp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.555 4.126 1.526 5.864L.053 23.27a.75.75 0 00.917.928l5.521-1.448A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.712 9.712 0 01-4.944-1.352l-.354-.211-3.674.964.979-3.567-.231-.368A9.714 9.714 0 012.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg>
+            WhatsApp us
+          </a>
+          <Link to="/auth?signup=true" className="btn-primary">Request a quote</Link>
+        </div>
+      </div>
+
+      {/* FOOTER */}
+      <footer className="landing-footer">
+        <div className="footer-grid">
+          <div className="footer-brand">
+            <Link to="/" className="nav-logo" style={{ fontSize: '24px' }}>Bespo<span>k</span>e</Link>
+            <p>Custom signage, event styling, and business branding. Designed and produced in Cape Town, South Africa.</p>
+            <p style={{ marginTop: '1rem', fontSize: '12px', color: 'rgba(201,169,110,0.6)' }}>Secure payments via Yoco — coming soon</p>
+          </div>
+          <div className="footer-col">
+            <h4>Services</h4>
+            <ul>
+              <li><a href="#services">Wedding Signage</a></li>
+              <li><a href="#services">Seating Charts</a></li>
+              <li><a href="#services">Event Backdrops</a></li>
+              <li><a href="#services">Balloon Garlands</a></li>
+              <li><a href="#services">Acrylic Displays</a></li>
+              <li><a href="#services">Stickers & Packaging</a></li>
+            </ul>
+          </div>
+          <div className="footer-col">
+            <h4>Navigate</h4>
+            <ul>
+              <li><Link to="/">Home</Link></li>
+              <li><a href="#services">Services</a></li>
+              <li><a href="#gallery">Gallery</a></li>
+              <li><a href="#about">About</a></li>
+              <li><Link to="/auth">My Projects</Link></li>
+            </ul>
+          </div>
+          <div className="footer-col">
+            <h4>Contact</h4>
+            <ul>
+              <li><a href="https://wa.me/27000000000" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+              <li><a href="mailto:hello@bespoke.co.za">hello@bespoke.co.za</a></li>
+              <li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+              <li><a href="#contact">Cape Town, South Africa</a></li>
+            </ul>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <p>© 2025 Bespoke. All rights reserved. Cape Town, South Africa.</p>
+          <div className="footer-social">
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
+            <a href="https://wa.me/27000000000" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          </div>
+        </div>
+      </footer>
+
+      {/* FLOATING WHATSAPP BUTTON */}
+      <a href="https://wa.me/27000000000?text=Hi%2C%20I%20found%20you%20on%20your%20website%20and%20I%27d%20like%20a%20quote"
+         target="_blank"
+         rel="noopener noreferrer"
+         className="float-wa"
+         aria-label="Chat on WhatsApp">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.126.555 4.126 1.526 5.864L.053 23.27a.75.75 0 00.917.928l5.521-1.448A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.712 9.712 0 01-4.944-1.352l-.354-.211-3.674.964.979-3.567-.231-.368A9.714 9.714 0 012.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/>
+        </svg>
+      </a>
+
+      {/* FLOATING CHAT BUTTON */}
+      <a href="#contact" className="float-chat" aria-label="Open chat">
+        <div className="float-chat-dot"></div>
+        Chat with us
       </a>
     </div>
   );

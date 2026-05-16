@@ -57,8 +57,8 @@ export default function Admin() {
       {/* Admin Sidebar */}
       <div className="w-72 border-r border-[#E8DFD0]/5 p-10 flex flex-col">
         <div className="flex items-center gap-3 mb-16">
-          <div className="w-8 h-8 bg-[#E8DFD0] flex items-center justify-center text-[#080806] font-bold text-xs">AS</div>
-          <span className="font-display font-semibold tracking-widest text-sm">ADMIN PANEL</span>
+          <div className="w-8 h-8 bg-[#E8DFD0] flex items-center justify-center text-[#080806] font-bold text-xs">B</div>
+          <span className="font-serif font-light tracking-widest text-sm uppercase">Bespoke Panel</span>
         </div>
 
         <div className="space-y-6 flex-1">
@@ -112,11 +112,11 @@ export default function Admin() {
       <div className="flex-1 p-12 lg:p-20 overflow-y-auto">
         <header className="mb-16 flex justify-between items-end">
           <div>
-            <h1 className="text-4xl font-display font-semibold mb-2 capitalize">
+            <h1 className="text-4xl font-serif font-light mb-2 capitalize">
               Admin {activeTab}
             </h1>
             <p className="text-[#E8DFD0]/40 font-light text-sm italic">
-              Aura Signs Operational Command
+              Bespoke Operational Command
             </p>
           </div>
           <button className="btn-primary px-6 py-2 text-[10px] tracking-widest">NEW PROJECT</button>
@@ -129,7 +129,7 @@ export default function Admin() {
               {stats.map((s) => (
                 <div key={s.label} className="glass-panel p-8 border-[#E8DFD0]/5">
                   <s.icon size={20} className="mb-6" style={{ color: s.color }} strokeWidth={1.5} />
-                  <div className="text-3xl font-display font-bold mb-1">{s.value}</div>
+                  <div className="text-3xl font-serif font-light mb-1">{s.value}</div>
                   <div className="text-[10px] uppercase tracking-[0.2em] text-[#E8DFD0]/30">{s.label}</div>
                 </div>
               ))}
@@ -138,7 +138,7 @@ export default function Admin() {
             {/* Recent Activity Section */}
             <div className="grid lg:grid-cols-2 gap-12">
               <div className="glass-panel p-10 border-[#E8DFD0]/5">
-                <h3 className="text-xl font-display font-semibold mb-8 flex justify-between items-center">
+                <h3 className="text-xl font-serif font-light mb-8 flex justify-between items-center">
                   Recent Status Changes
                   <ArrowUpRight size={16} className="text-[#E8DFD0]/20" />
                 </h3>
@@ -163,7 +163,7 @@ export default function Admin() {
               </div>
 
               <div className="glass-panel p-10 border-[#E8DFD0]/5">
-                <h3 className="text-xl font-display font-semibold mb-8 flex justify-between items-center">
+                <h3 className="text-xl font-serif font-light mb-8 flex justify-between items-center">
                   New Quote Requests
                   <MessageSquare size={16} className="text-[#E8DFD0]/20" />
                 </h3>

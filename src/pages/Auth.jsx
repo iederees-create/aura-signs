@@ -31,7 +31,7 @@ export default function Auth() {
         password,
       });
       if (error) setMessage(error.message);
-      else setMessage("Check your email for the confirmation link to enter The Vault.");
+      else setMessage("Check your email for the confirmation link to enter your Project Vault.");
     } else {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -54,19 +54,19 @@ export default function Auth() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="w-full max-w-md relative z-10"
       >
-        <Link to="/" className="block text-center mb-8 font-display font-semibold tracking-[0.2em] text-[#E8DFD0] text-xl">
-          AURA SIGNS
+        <Link to="/" className="block text-center mb-8 font-serif font-light tracking-[0.2em] text-[#E8DFD0] text-3xl">
+          BESPOKE
         </Link>
         
         <div className="glass-panel p-10 rounded-none relative">
           <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#E8DFD0]/30 to-transparent" />
           
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-display font-semibold mb-2 text-[#E8DFD0]">
-              {isResetting ? "Reset Password" : (isSignUp ? "The Bridal Vault" : "Welcome Back")}
+            <h2 className="text-3xl font-serif font-light mb-2 text-[#E8DFD0]">
+              {isResetting ? "Reset Password" : (isSignUp ? "Project Vault" : "Welcome Back")}
             </h2>
             <p className="text-[#E8DFD0]/60 text-sm font-light">
-              {isResetting ? "Enter your email to receive a secure reset link." : (isSignUp ? "Unlock exclusive tools, checklists, and private collections." : "Sign in to access your dashboard and inspirations.")}
+              {isResetting ? "Enter your email to receive a secure reset link." : (isSignUp ? "Access your custom projects, inspirations, and design proofs." : "Sign in to access your dashboard and inspirations.")}
             </p>
           </div>
 

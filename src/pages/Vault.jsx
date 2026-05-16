@@ -67,7 +67,7 @@ export default function Vault() {
     setQuoteSubmitted(true);
     setTimeout(() => {
       setShowQuoteForm(false);
-      const whatsappMsg = encodeURIComponent(`Hi Aura Signs! I have submitted a quote request from my Vault for my wedding on ${e.target.weddingDate.value} at ${e.target.venue.value}.`);
+      const whatsappMsg = encodeURIComponent(`Hi Bespoke! I have submitted a quote request from my Vault for my wedding on ${e.target.weddingDate.value} at ${e.target.venue.value}.`);
       window.open(`https://wa.me/27123456789?text=${whatsappMsg}`, '_blank');
     }, 2000);
   };
@@ -111,8 +111,8 @@ export default function Vault() {
     <div className="min-h-screen bg-[#080806] flex text-[#E8DFD0]">
       {/* Sidebar */}
       <div className="w-80 border-r border-[#E8DFD0]/5 p-12 flex flex-col hidden lg:flex">
-        <Link to="/" className="font-display font-semibold tracking-[0.2em] text-[#E8DFD0] text-xl mb-20">
-          AURA SIGNS
+        <Link to="/" className="font-serif font-light tracking-[0.2em] text-[#E8DFD0] text-3xl mb-20">
+          BESPOKE
         </Link>
         <div className="space-y-8 flex-1">
           <button onClick={() => setActiveTab("vault")} className={`flex items-center gap-4 text-xs uppercase tracking-[0.2em] transition-colors ${activeTab === 'vault' ? 'text-[#E8DFD0]' : 'text-[#E8DFD0]/40 hover:text-[#E8DFD0]'}`}>
@@ -233,11 +233,11 @@ export default function Vault() {
       <div className="flex-1 p-12 lg:p-24 overflow-y-auto">
         <header className="mb-24 flex justify-between items-start">
           <div>
-            <h1 className="text-5xl font-display font-semibold mb-4">
-              {activeTab === 'vault' ? 'Welcome to The Vault' : 'Your Signage Project'}
+            <h1 className="text-5xl font-serif font-light mb-4">
+              {activeTab === 'vault' ? 'Project Vault' : 'Your Signage Project'}
             </h1>
             <p className="text-[#E8DFD0]/40 font-light text-lg italic">
-              {activeTab === 'vault' ? 'Exclusive resources for your Cape Town wedding.' : `Order ${mockProject.id} · ${mockProject.package}`}
+              {activeTab === 'vault' ? 'Exclusive resources for your Cape Town projects.' : `Order ${mockProject.id} · ${mockProject.package}`}
             </p>
           </div>
           <div className="flex gap-4">
@@ -253,7 +253,7 @@ export default function Vault() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-panel p-12 group relative overflow-hidden">
               <div className="absolute top-0 right-0 w-40 h-40 bg-[#E8DFD0]/5 rounded-bl-full group-hover:scale-110 transition-transform duration-700" />
               <FileText size={32} className="text-[#E8DFD0] mb-8" strokeWidth={1.5} />
-              <h3 className="text-3xl font-display font-semibold mb-4">The Master Checklist</h3>
+              <h3 className="text-3xl font-serif font-light mb-4">The Master Checklist</h3>
               <p className="text-[#E8DFD0]/50 font-light mb-12 leading-relaxed">
                 Our definitive guide to every sign you need, from welcome boards to bar menus and seating charts.
               </p>
@@ -268,7 +268,7 @@ export default function Vault() {
               <h3 className="text-2xl font-display font-semibold mb-2">Refer a Friend</h3>
               <p className="text-[#E8DFD0]/40 text-sm font-light mb-8 italic">Share the Aura experience and they get 10% off.</p>
               <div className="bg-[#080806] border border-[#E8DFD0]/10 p-4 text-[10px] uppercase tracking-widest text-center mb-6 text-[#E8DFD0]/60">
-                AURASIGNS.COM/REF/JANE-D
+                BESPOKE.CO.ZA/REF/JANE-D
               </div>
               <button className="text-xs uppercase tracking-widest text-[#E8DFD0] border-b border-[#E8DFD0] pb-2 self-start hover:text-[#C9603A] hover:border-[#C9603A] transition-colors">Copy Link</button>
             </motion.div>
