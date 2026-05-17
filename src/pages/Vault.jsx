@@ -2,14 +2,17 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Download, LayoutDashboard, Heart, Settings, LogOut, FileText, FolderKanban, ArrowRight, Loader2 } from "lucide-react";
+import { Download, LayoutDashboard, Heart, Settings, LogOut, FileText, FolderKanban, ArrowRight, Loader2, Save, User } from "lucide-react";
 
 export default function Vault() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState({ full_name: "", phone: "", email: "" });
   const [activeTab, setActiveTab] = useState("vault");
   const [showQuoteForm, setShowQuoteForm] = useState(false);
   const [quoteSubmitted, setQuoteSubmitted] = useState(false);
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   const mockProject = {
     id: "PRJ-2026-05",
@@ -29,18 +32,76 @@ export default function Vault() {
   const [feedback, setFeedback] = useState("");
   const [noChangesChecked, setNoChangesChecked] = useState(false);
 
+  // Self-healing: Dynamic profile check and auto-creation
+  const checkAndSyncProfile = async (sessionUser) => {
+    try {
+      // 1. Try to fetch existing profile
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', sessionUser.id)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error reading profile:", error);
+        return;
+      }
+
+      if (data) {
+        // Profile exists, populate fields
+        setProfile({
+          full_name: data.full_name || "",
+          phone: data.phone || "",
+          email: data.email || sessionUser.email
+        });
+      } else {
+        // Profile does NOT exist (self-healing triggers here)
+        console.log("No profile row found. Dynamically syncing user...");
+        const newProfile = {
+          id: sessionUser.id,
+          email: sessionUser.email,
+          full_name: sessionUser.user_metadata?.full_name || "",
+          phone: "",
+          is_admin: false
+        };
+
+        const { error: insertError } = await supabase
+          .from('profiles')
+          .insert([newProfile]);
+
+        if (insertError) {
+          console.error("Failed to self-heal profile row:", insertError);
+        } else {
+          console.log("Profile successfully synchronized!");
+          setProfile({
+            full_name: newProfile.full_name,
+            phone: newProfile.phone,
+            email: newProfile.email
+          });
+        }
+      }
+    } catch (err) {
+      console.error("Critical profile sync error:", err);
+    }
+  };
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session) {
         navigate("/auth");
       } else {
         setUser(session.user);
+        checkAndSyncProfile(session.user);
       }
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) navigate("/auth");
-      else setUser(session.user);
+      if (!session) {
+        navigate("/auth");
+      } else {
+        setUser(session.user);
+        checkAndSyncProfile(session.user);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -70,6 +131,33 @@ export default function Vault() {
       const whatsappMsg = encodeURIComponent(`Hi Bold & Bespoke! I have submitted a quote request from my Vault for my wedding on ${e.target.weddingDate.value} at ${e.target.venue.value}.`);
       window.open(`https://wa.me/27662720491?text=${whatsappMsg}`, '_blank');
     }, 2000);
+  };
+
+  const handleProfileSave = async (e) => {
+    e.preventDefault();
+    setSavingProfile(true);
+    setSaveSuccess(false);
+
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          full_name: profile.full_name,
+          phone: profile.phone
+        })
+        .eq('id', user.id);
+
+      if (error) {
+        console.error("Error saving profile details:", error);
+      } else {
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 3000);
+      }
+    } catch (err) {
+      console.error("Critical error updating profile details:", err);
+    } finally {
+      setSavingProfile(false);
+    }
   };
 
   if (!user) return <div className="min-h-screen bg-[#FAF8F5]" />;
@@ -123,11 +211,11 @@ export default function Vault() {
             <FolderKanban size={18} strokeWidth={1.5} />
             My Projects
           </button>
-          <button className="flex items-center gap-4 text-xs uppercase tracking-[0.2em] text-[#080806]/40 hover:text-[#080806] transition-colors font-bold">
+          <button onClick={() => setActiveTab("vault")} className="flex items-center gap-4 text-xs uppercase tracking-[0.2em] text-[#080806]/40 hover:text-[#080806] transition-colors font-bold">
             <Heart size={18} strokeWidth={1.5} />
             Saved Items
           </button>
-          <button className="flex items-center gap-4 text-xs uppercase tracking-[0.2em] text-[#080806]/40 hover:text-[#080806] transition-colors font-bold">
+          <button onClick={() => setActiveTab("account")} className={`flex items-center gap-4 text-xs uppercase tracking-[0.2em] transition-colors font-bold ${activeTab === 'account' ? 'text-[#C9603A]' : 'text-[#080806]/55 hover:text-[#080806]'}`}>
             <Settings size={18} strokeWidth={1.5} />
             Account
           </button>
@@ -231,50 +319,51 @@ export default function Vault() {
 
       {/* Main Content */}
       <div className="flex-1 p-12 lg:p-24 overflow-y-auto">
-        <header className="mb-24 flex justify-between items-start">
-          <div>
-            <h1 className="text-5xl font-serif font-light mb-4 text-[#080806]">
-              {activeTab === 'vault' ? 'Project Vault' : 'Your Signage Project'}
-            </h1>
-            <p className="text-[#080806]/70 font-light text-lg italic">
-              {activeTab === 'vault' ? 'Exclusive resources for your Cape Town projects.' : `Order ${mockProject.id} · ${mockProject.package}`}
-            </p>
-          </div>
-          <div className="flex gap-4">
-            {activeTab === 'vault' && (
-              <button onClick={() => setShowQuoteForm(true)} className="btn-primary bg-[#080806] text-white hover:bg-transparent hover:text-[#080806] border border-transparent hover:border-[#080806] transition-all px-8 py-3 text-xs font-bold rounded-none">Request New Quote</button>
-            )}
-          </div>
-        </header>
-
-        {activeTab === 'vault' ? (
-          <div className="grid lg:grid-cols-2 gap-12 max-w-6xl">
-            {/* Checklist Card */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-[#080806]/10 p-12 group relative overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
-              <div className="absolute top-0 right-0 w-40 h-40 bg-[#080806]/5 rounded-bl-full group-hover:scale-110 transition-transform duration-700" />
-              <FileText size={32} className="text-[#080806] mb-8" strokeWidth={1.5} />
-              <h3 className="text-3xl font-serif font-light mb-4 text-[#080806]">The Master Checklist</h3>
-              <p className="text-[#080806]/50 font-light mb-12 leading-relaxed">
-                Our definitive guide to every sign you need, from welcome boards to bar menus and seating charts.
-              </p>
-              <button className="btn-outline w-full py-5 flex items-center justify-between border border-[#080806] text-[#080806] hover:bg-[#080806] hover:text-white font-bold transition-all">
-                Download PDF Guide
-                <Download size={18} />
-              </button>
-            </motion.div>
-
-            {/* Referrals Card */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white border border-[#080806]/10 p-12 flex flex-col justify-center shadow-sm hover:shadow-md transition-all duration-300">
-              <h3 className="text-2xl font-serif font-light mb-2 text-[#080806]">Refer a Friend</h3>
-              <p className="text-[#080806]/40 text-sm font-light mb-8 italic">Share the Aura experience and they get 10% off.</p>
-              <div className="bg-[#FAF8F5] border border-[#080806]/10 p-4 text-[10px] uppercase tracking-widest text-center mb-6 text-[#080806]/60 font-bold">
-                BOLDANDBESPOKE.CO.ZA/REF/JANE-D
+        {activeTab === 'vault' && (
+          <>
+            <header className="mb-24 flex justify-between items-start">
+              <div>
+                <h1 className="text-5xl font-serif font-light mb-4 text-[#080806]">Project Vault</h1>
+                <p className="text-[#080806]/70 font-light text-lg italic">Exclusive resources for your Cape Town projects.</p>
               </div>
-              <button className="text-xs uppercase tracking-widest text-[#080806] border-b border-[#080806] pb-2 self-start hover:text-[#C9603A] hover:border-[#C9603A] transition-colors font-bold">Copy Link</button>
-            </motion.div>
-          </div>
-        ) : (
+              <button onClick={() => setShowQuoteForm(true)} className="btn-primary bg-[#080806] text-white hover:bg-transparent hover:text-[#080806] border border-transparent hover:border-[#080806] transition-all px-8 py-3 text-xs font-bold rounded-none">Request New Quote</button>
+            </header>
+
+            <div className="grid lg:grid-cols-2 gap-12 max-w-6xl">
+              {/* Checklist Card */}
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-[#080806]/10 p-12 group relative overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="absolute top-0 right-0 w-40 h-40 bg-[#080806]/5 rounded-bl-full group-hover:scale-110 transition-transform duration-700" />
+                <FileText size={32} className="text-[#080806] mb-8" strokeWidth={1.5} />
+                <h3 className="text-3xl font-serif font-light mb-4 text-[#080806]">The Master Checklist</h3>
+                <p className="text-[#080806]/50 font-light mb-12 leading-relaxed">
+                  Our definitive guide to every sign you need, from welcome boards to bar menus and seating charts.
+                </p>
+                <button className="btn-outline w-full py-5 flex items-center justify-between border border-[#080806] text-[#080806] hover:bg-[#080806] hover:text-white font-bold transition-all">
+                  Download PDF Guide
+                  <Download size={18} />
+                </button>
+              </motion.div>
+
+              {/* Referrals Card */}
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white border border-[#080806]/10 p-12 flex flex-col justify-center shadow-sm hover:shadow-md transition-all duration-300">
+                <h3 className="text-2xl font-serif font-light mb-2 text-[#080806]">Refer a Friend</h3>
+                <p className="text-[#080806]/40 text-sm font-light mb-8 italic">Share the Aura experience and they get 10% off.</p>
+                <div className="bg-[#FAF8F5] border border-[#080806]/10 p-4 text-[10px] uppercase tracking-widest text-center mb-6 text-[#080806]/60 font-bold">
+                  BOLDANDBESPOKE.CO.ZA/REF/JANE-D
+                </div>
+                <button className="text-xs uppercase tracking-widest text-[#080806] border-b border-[#080806] pb-2 self-start hover:text-[#C9603A] hover:border-[#C9603A] transition-colors font-bold">Copy Link</button>
+              </motion.div>
+            </div>
+          </>
+        )}
+
+        {activeTab === 'projects' && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-6xl">
+            <header className="mb-24">
+              <h1 className="text-5xl font-serif font-light mb-4 text-[#080806]">Your Signage Project</h1>
+              <p className="text-[#080806]/70 font-light text-lg italic">Order {mockProject.id} · {mockProject.package}</p>
+            </header>
+
             <div className="bg-white border border-[#080806]/10 p-12 mb-16 shadow-sm">
               <div className="flex justify-between items-center mb-12">
                 <span className="text-[10px] uppercase tracking-[0.3em] text-[#080806]/40 font-bold">Production Timeline</span>
@@ -310,6 +399,85 @@ export default function Vault() {
                 ))}
               </div>
             </div>
+          </motion.div>
+        )}
+
+        {/* Account Profile Editing Form */}
+        {activeTab === 'account' && (
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-xl">
+            <header className="mb-20">
+              <h1 className="text-5xl font-serif font-light mb-4 text-[#080806]">Account Settings</h1>
+              <p className="text-[#080806]/70 font-light text-lg italic">Personalize your Bold & Bespoke experience.</p>
+            </header>
+
+            <form onSubmit={handleProfileSave} className="bg-white border border-[#080806]/10 p-12 shadow-sm space-y-8">
+              <div className="flex items-center gap-4 pb-6 border-b border-[#080806]/10">
+                <div className="w-12 h-12 rounded-full bg-[#FAF8F5] border border-[#080806]/10 flex items-center justify-center text-[#080806]">
+                  <User size={22} strokeWidth={1.5} />
+                </div>
+                <div>
+                  <h3 className="text-lg font-serif font-bold text-[#080806]">{profile.full_name || "Valued Client"}</h3>
+                  <p className="text-xs text-[#080806]/50">{profile.email}</p>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] uppercase tracking-widest text-[#080806]/60 font-bold">Registered Email</label>
+                  <input 
+                    type="text" 
+                    disabled 
+                    value={profile.email} 
+                    className="w-full bg-[#F4F0EA]/50 border border-[#080806]/10 p-3 text-sm text-[#080806]/60 cursor-not-allowed outline-none font-medium" 
+                  />
+                  <p className="text-[10px] italic text-[#080806]/40">Your unique account identifier. Managed via authentication provider.</p>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] uppercase tracking-widest text-[#080806]/60 font-bold">Full Name</label>
+                  <input 
+                    type="text" 
+                    value={profile.full_name} 
+                    onChange={(e) => setProfile(prev => ({ ...prev, full_name: e.target.value }))}
+                    placeholder="e.g. John Doe"
+                    required
+                    className="w-full bg-white border border-[#080806]/10 p-3 text-sm focus:border-[#080806]/40 outline-none text-[#080806] font-medium" 
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-[10px] uppercase tracking-widest text-[#080806]/60 font-bold">Phone Number</label>
+                  <input 
+                    type="tel" 
+                    value={profile.phone} 
+                    onChange={(e) => setProfile(prev => ({ ...prev, phone: e.target.value }))}
+                    placeholder="e.g. +27 66 272 0491"
+                    className="w-full bg-white border border-[#080806]/10 p-3 text-sm focus:border-[#080806]/40 outline-none text-[#080806] font-medium" 
+                  />
+                </div>
+              </div>
+
+              {saveSuccess && (
+                <div className="bg-[#7A8C6E]/10 border border-[#7A8C6E]/30 text-[#7A8C6E] text-xs font-bold uppercase tracking-wider p-4 text-center">
+                  Profile updated successfully!
+                </div>
+              )}
+
+              <button 
+                type="submit" 
+                disabled={savingProfile}
+                className="w-full btn-primary bg-[#080806] text-white hover:bg-transparent hover:text-[#080806] border border-transparent hover:border-[#080806] transition-all py-4 flex items-center justify-center gap-3 font-bold"
+              >
+                {savingProfile ? (
+                  <Loader2 className="animate-spin" size={18} />
+                ) : (
+                  <>
+                    <Save size={18} />
+                    Save Changes
+                  </>
+                )}
+              </button>
+            </form>
           </motion.div>
         )}
       </div>
