@@ -40,6 +40,8 @@ const popularLanguages = [
 export default function Navbar() {
   const { basket, openDrawer } = useQuote();
   const { language, changeLanguage, t } = useLanguage();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
@@ -59,6 +61,15 @@ export default function Navbar() {
         return;
       }
       setUser(sessionUser);
+      
+      // Failsafe admin override for specified admin emails
+      if (
+        sessionUser.email === 'iedereesf@gmail.com' || 
+        sessionUser.email === 'iedereesfrancis@gmail.com'
+      ) {
+        setIsAdmin(true);
+        return;
+      }
       
       try {
         const { data, error } = await supabase
@@ -113,20 +124,62 @@ export default function Navbar() {
 
   return (
     <>
-      <nav id="main-nav" className={`landing-nav ${isScrolled ? 'scrolled' : ''}`}>
-        <Link to="/" className="nav-logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Bold & Bespo<span>k</span>e</Link>
+      <nav id="main-nav" className={`landing-nav ${isScrolled ? 'scrolled' : ''}`} style={{ background: 'rgba(253,251,247,0.96)', borderBottom: '1px solid rgba(8,8,6,0.1)' }}>
+        <Link to="/" className="nav-logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ color: '#080806' }}>
+          Bold & Bespo<span style={{ color: '#C9603A' }}>k</span>e
+        </Link>
         <ul className="nav-links">
-          <li><Link to="/" className={location.pathname === '/' ? 'active' : ''} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>{t('nav.home')}</Link></li>
-          <li><Link to="/services" className={location.pathname === '/services' ? 'active' : ''} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>{t('nav.services')}</Link></li>
-          <li><Link to="/gallery" className={location.pathname === '/gallery' ? 'active' : ''} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>{t('nav.gallery')}</Link></li>
-          <li><Link to="/about" className={location.pathname === '/about' ? 'active' : ''} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>{t('nav.about')}</Link></li>
-          <li><Link to="/vault" className={location.pathname === '/vault' ? 'active' : ''} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>{t('nav.myProjects')}</Link></li>
+          <li>
+            <Link 
+              to="/" 
+              className={`text-xs uppercase tracking-widest font-extrabold transition-all px-2 py-1 ${location.pathname === '/' ? 'text-[#C9603A]' : 'text-[#080806] hover:text-[#C9603A]'}`}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
+              {t('nav.home')}
+            </Link>
+          </li>
+          <li>
+            <Link 
+              to="/services" 
+              className={`text-xs uppercase tracking-widest font-extrabold transition-all px-2 py-1 ${location.pathname === '/services' ? 'text-[#C9603A]' : 'text-[#080806] hover:text-[#C9603A]'}`}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
+              {t('nav.services')}
+            </Link>
+          </li>
+          <li>
+            <Link 
+              to="/gallery" 
+              className={`text-xs uppercase tracking-widest font-extrabold transition-all px-2 py-1 ${location.pathname === '/gallery' ? 'text-[#C9603A]' : 'text-[#080806] hover:text-[#C9603A]'}`}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
+              {t('nav.gallery')}
+            </Link>
+          </li>
+          <li>
+            <Link 
+              to="/about" 
+              className={`text-xs uppercase tracking-widest font-extrabold transition-all px-2 py-1 ${location.pathname === '/about' ? 'text-[#C9603A]' : 'text-[#080806] hover:text-[#C9603A]'}`}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
+              {t('nav.about')}
+            </Link>
+          </li>
+          <li>
+            <Link 
+              to="/vault" 
+              className={`text-xs uppercase tracking-widest font-extrabold transition-all px-2 py-1 ${location.pathname === '/vault' ? 'text-[#C9603A]' : 'text-[#080806] hover:text-[#C9603A]'}`}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
+              {t('nav.myProjects')}
+            </Link>
+          </li>
           
           {isAdmin && (
             <li>
               <Link 
                 to="/admin" 
-                className={`flex items-center gap-1.5 px-3 py-1.5 border border-[#C9A96E]/20 text-[10px] text-[#C9A96E] hover:border-[#C9A96E]/50 hover:text-white transition-all rounded-lg tracking-widest font-semibold uppercase ${location.pathname === '/admin' ? 'bg-[#C9A96E]/10 border-[#C9A96E]' : ''}`}
+                className={`flex items-center gap-1.5 px-3 py-1.5 border border-[#080806] text-xs text-[#080806] hover:bg-[#080806] hover:text-white transition-all rounded-none tracking-widest font-extrabold uppercase ${location.pathname === '/admin' ? 'bg-[#080806] text-white' : ''}`}
               >
                 <Brain size={12} className="animate-pulse shrink-0" />
                 Admin
@@ -135,13 +188,13 @@ export default function Navbar() {
           )}
           
           {/* Language Switcher Dropdown */}
-          <li className="relative group flex items-center mr-2 text-[#E8DFD0]">
-            <button className="flex items-center gap-1.5 bg-[#E8DFD0]/5 border border-[#E8DFD0]/10 hover:border-[#C9A96E]/50 px-3 py-1.5 text-xs text-[#E8DFD0]/90 hover:text-[#E8DFD0] transition-colors rounded-lg font-medium">
+          <li className="relative group flex items-center mr-2 text-[#080806]">
+            <button className="flex items-center gap-1.5 bg-[#080806]/5 border border-[#080806]/15 hover:border-[#080806] px-3 py-1.5 text-xs text-[#080806] transition-colors rounded-none font-bold">
               <span>{getActiveFlag()}</span>
               <span className="uppercase tracking-wider">{language.split('-')[0]}</span>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>
             </button>
-            <div className="absolute right-0 top-full mt-2 w-44 bg-[#080806] border border-[#E8DFD0]/10 rounded-xl p-1.5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 shadow-2xl flex flex-col z-50">
+            <div className="absolute right-0 top-full mt-2 w-44 bg-[#FAF8F5] border border-[#080806]/15 rounded-none p-1.5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 shadow-2xl flex flex-col z-50">
               {[
                 { code: 'en', label: '🇬🇧 English' },
                 { code: 'fr', label: '🇫🇷 Français' },
@@ -151,15 +204,15 @@ export default function Navbar() {
                 <button
                   key={lang.code}
                   onClick={() => changeLanguage(lang.code)}
-                  className={`w-full px-3 py-2 text-left text-xs rounded-lg transition-colors flex items-center gap-2 ${language === lang.code ? 'bg-[#E8DFD0]/10 text-[#C9A96E]' : 'hover:bg-[#E8DFD0]/5 text-[#E8DFD0]/70'}`}
+                  className={`w-full px-3 py-2 text-left text-xs rounded-none transition-colors flex items-center gap-2 ${language === lang.code ? 'bg-[#080806]/10 text-[#C9603A] font-bold' : 'hover:bg-[#080806]/5 text-[#080806]/80'}`}
                 >
                   {lang.label}
                 </button>
               ))}
-              <div className="h-[1px] bg-[#E8DFD0]/10 my-1" />
+              <div className="h-[1px] bg-[#080806]/10 my-1" />
               <button
                 onClick={() => setIsLangModalOpen(true)}
-                className="w-full px-3 py-2 text-left text-xs rounded-lg transition-colors flex items-center gap-2 text-[#C9A96E] hover:bg-[#C9A96E]/10"
+                className="w-full px-3 py-2 text-left text-xs rounded-none transition-colors flex items-center gap-2 text-[#C9603A] hover:bg-[#C9603A]/10 font-bold"
               >
                 🌐 More Languages...
               </button>
@@ -170,12 +223,12 @@ export default function Navbar() {
           <li className="flex items-center">
             <button 
               onClick={openDrawer} 
-              className="relative p-2 text-[#E8DFD0]/80 hover:text-[#E8DFD0] transition-colors focus:outline-none mr-2 flex items-center"
+              className="relative p-2 text-[#080806] hover:text-[#C9603A] transition-colors focus:outline-none mr-2 flex items-center"
               aria-label="Open Quote Basket"
             >
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
               {basket.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#C9A96E] text-[#080806] text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border border-[#080806]">
+                <span className="absolute -top-1 -right-1 bg-[#C9603A] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border border-white">
                   {basket.length}
                 </span>
               )}
@@ -189,13 +242,20 @@ export default function Navbar() {
                   await supabase.auth.signOut();
                   window.location.reload();
                 }}
-                className="nav-cta border border-[#C9A96E]/40 text-[#C9A96E] hover:bg-[#C9A96E] hover:text-[#080806] transition-all px-4 py-2 text-xs uppercase tracking-widest font-bold bg-transparent"
+                className="border border-[#080806] text-[#080806] hover:bg-[#080806] hover:text-white transition-all px-4 py-2 text-xs uppercase tracking-widest font-extrabold bg-transparent rounded-none"
               >
                 Sign Out
               </button>
             </li>
           ) : (
-            <li><Link to="/auth?signup=true" className="nav-cta">{t('nav.getQuote')}</Link></li>
+            <li>
+              <Link 
+                to="/auth?signup=true" 
+                className="border border-[#080806] text-white bg-[#080806] hover:bg-transparent hover:text-[#080806] transition-all px-4 py-2 text-xs uppercase tracking-widest font-extrabold rounded-none"
+              >
+                {t('nav.getQuote')}
+              </Link>
+            </li>
           )}
         </ul>
         <button 
@@ -203,23 +263,25 @@ export default function Navbar() {
           aria-label="Open menu" 
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
-          <span></span><span></span><span></span>
+          <span style={{ background: '#080806' }}></span>
+          <span style={{ background: '#080806' }}></span>
+          <span style={{ background: '#080806' }}></span>
         </button>
       </nav>
 
       {/* Mobile Navigation Menu */}
-      <div className={`mobile-nav ${isMobileMenuOpen ? 'open' : ''}`} id="mobile-nav">
-        <Link to="/" onClick={() => { setIsMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>{t('nav.home')}</Link>
-        <Link to="/services" onClick={handleNavClick}>{t('nav.services')}</Link>
-        <Link to="/gallery" onClick={handleNavClick}>{t('nav.gallery')}</Link>
-        <Link to="/about" onClick={handleNavClick}>{t('nav.about')}</Link>
-        <Link to="/vault" onClick={handleNavClick}>{t('nav.myProjects')}</Link>
+      <div className={`mobile-nav ${isMobileMenuOpen ? 'open' : ''}`} id="mobile-nav" style={{ background: '#FAF8F5' }}>
+        <Link to="/" style={{ color: '#080806' }} onClick={() => { setIsMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>{t('nav.home')}</Link>
+        <Link to="/services" style={{ color: '#080806' }} onClick={handleNavClick}>{t('nav.services')}</Link>
+        <Link to="/gallery" style={{ color: '#080806' }} onClick={handleNavClick}>{t('nav.gallery')}</Link>
+        <Link to="/about" style={{ color: '#080806' }} onClick={handleNavClick}>{t('nav.about')}</Link>
+        <Link to="/vault" style={{ color: '#080806' }} onClick={handleNavClick}>{t('nav.myProjects')}</Link>
         
         {isAdmin && (
           <Link 
             to="/admin" 
             onClick={handleNavClick}
-            className="flex items-center justify-center gap-2 py-3 border border-[#C9A96E]/15 text-[#C9A96E] hover:border-[#C9A96E] transition-all tracking-widest uppercase text-[11px] rounded-lg mt-2 font-semibold"
+            className="flex items-center justify-center gap-2 py-3 border border-[#080806] text-[#080806] hover:bg-[#080806] hover:text-white transition-all tracking-widest uppercase text-[11px] rounded-none mt-2 font-bold"
           >
             <Brain size={14} className="animate-pulse shrink-0" />
             Admin Panel
@@ -228,7 +290,7 @@ export default function Navbar() {
         
         <button 
           onClick={() => { setIsMobileMenuOpen(false); openDrawer(); }}
-          className="flex items-center justify-center gap-2 py-3.5 border border-[#E8DFD0]/10 text-[#E8DFD0] tracking-widest uppercase text-[11px] bg-[#E8DFD0]/5 rounded-none font-medium mt-2"
+          className="flex items-center justify-center gap-2 py-3.5 border border-[#080806]/15 text-[#080806] tracking-widest uppercase text-[11px] bg-[#080806]/5 rounded-none font-bold mt-2"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
           {t('nav.basket')} ({basket.length})
@@ -241,16 +303,16 @@ export default function Navbar() {
               await supabase.auth.signOut();
               window.location.reload();
             }}
-            className="w-full bg-[#C9603A] text-white py-4 text-xs uppercase tracking-widest font-bold mt-4 border border-[#C9603A] hover:bg-transparent hover:text-[#C9603A] transition-all text-center"
+            className="w-full bg-[#C9603A] text-white py-4 text-xs uppercase tracking-widest font-bold mt-4 border border-[#C9603A] hover:bg-transparent hover:text-[#C9603A] transition-all text-center rounded-none"
           >
             Sign Out
           </button>
         ) : (
-          <Link to="/auth?signup=true" onClick={() => setIsMobileMenuOpen(false)}>{t('nav.getQuote')}</Link>
+          <Link to="/auth?signup=true" style={{ color: '#080806' }} onClick={() => setIsMobileMenuOpen(false)}>{t('nav.getQuote')}</Link>
         )}
         
         {/* Mobile Language Switcher */}
-        <div className="flex flex-wrap gap-2 justify-center items-center py-4 border-t border-[#E8DFD0]/10 mt-4 px-4">
+        <div className="flex flex-wrap gap-2 justify-center items-center py-4 border-t border-[#080806]/10 mt-4 px-4">
           {[
             { code: 'en', flag: '🇬🇧' },
             { code: 'fr', flag: '🇫🇷' },
@@ -260,14 +322,14 @@ export default function Navbar() {
             <button
               key={lang.code}
               onClick={() => changeLanguage(lang.code)}
-              className={`px-3 py-1.5 text-xs rounded-lg border uppercase tracking-wider font-semibold transition-all ${language === lang.code ? 'bg-[#C9A96E] text-[#080806] border-[#C9A96E]' : 'border-[#E8DFD0]/10 text-[#E8DFD0]/70'}`}
+              className={`px-3 py-1.5 text-xs rounded-none border uppercase tracking-wider font-extrabold transition-all ${language === lang.code ? 'bg-[#080806] text-white border-[#080806]' : 'border-[#080806]/15 text-[#080806]/70'}`}
             >
               {lang.flag} {lang.code}
             </button>
           ))}
           <button
             onClick={() => { setIsMobileMenuOpen(false); setIsLangModalOpen(true); }}
-            className="px-3 py-1.5 text-xs rounded-lg border border-[#C9A96E]/30 text-[#C9A96E] uppercase tracking-wider font-semibold hover:bg-[#C9A96E]/10 transition-all flex items-center gap-1"
+            className="px-3 py-1.5 text-xs rounded-none border border-[#080806] text-[#080806] uppercase tracking-wider font-extrabold hover:bg-[#080806]/10 transition-all flex items-center gap-1"
           >
             🌐 More...
           </button>
@@ -284,18 +346,18 @@ export default function Navbar() {
           />
 
           {/* Modal Box */}
-          <div className="relative w-full max-w-2xl bg-[#080806] border border-[#E8DFD0]/10 rounded-2xl text-[#E8DFD0] shadow-2xl flex flex-col max-h-[82vh] overflow-hidden z-10 animate-scale-up">
+          <div className="relative w-full max-w-2xl bg-[#FAF8F5] border border-[#080806]/15 rounded-none text-[#080806] shadow-2xl flex flex-col max-h-[82vh] overflow-hidden z-10 animate-scale-up">
             
             {/* Modal Header */}
-            <div className="p-6 border-b border-[#E8DFD0]/10">
+            <div className="p-6 border-b border-[#080806]/15">
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="text-[#C9A96E] text-xs font-medium uppercase tracking-widest">Universal Translator</span>
+                  <span className="text-[#C9603A] text-xs font-bold uppercase tracking-widest">Universal Translator</span>
                   <h3 className="font-serif text-2xl tracking-wide mt-1">Select Language</h3>
                 </div>
                 <button 
                   onClick={() => setIsLangModalOpen(false)}
-                  className="p-2 hover:bg-[#E8DFD0]/5 rounded-full transition-colors text-[#E8DFD0]/60 hover:text-[#E8DFD0]"
+                  className="p-2 hover:bg-[#080806]/5 rounded-full transition-colors text-[#080806]/60 hover:text-[#080806]"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
                 </button>
@@ -303,7 +365,7 @@ export default function Navbar() {
 
               {/* Search Box */}
               <div className="mt-4 relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#E8DFD0]/30">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#080806]/35">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
                 </span>
                 <input 
@@ -311,7 +373,7 @@ export default function Navbar() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search 100+ languages..."
-                  className="w-full bg-[#E8DFD0]/5 border border-[#E8DFD0]/10 rounded-xl pl-12 pr-4 py-3 text-sm text-[#E8DFD0] placeholder-[#E8DFD0]/30 focus:border-[#C9A96E]/50 focus:outline-none transition-colors"
+                  className="w-full bg-white border border-[#080806]/15 rounded-none pl-12 pr-4 py-3 text-sm text-[#080806] placeholder-[#080806]/35 focus:border-[#C9603A] focus:outline-none transition-colors"
                 />
               </div>
             </div>
@@ -319,7 +381,7 @@ export default function Navbar() {
             {/* Modal Scrollable Body */}
             <div className="flex-1 overflow-y-auto p-6">
               {filteredLanguages.length === 0 ? (
-                <div className="text-center py-12 text-[#E8DFD0]/40 text-sm">
+                <div className="text-center py-12 text-[#080806]/40 text-sm">
                   No languages found matching "{searchQuery}"
                 </div>
               ) : (
@@ -331,10 +393,10 @@ export default function Navbar() {
                         changeLanguage(lang.code);
                         setIsLangModalOpen(false);
                       }}
-                      className={`flex items-center gap-3 px-4 py-3.5 text-sm text-left border rounded-xl transition-all ${language === lang.code ? 'bg-[#C9A96E]/10 border-[#C9A96E] text-[#C9A96E]' : 'bg-[#E8DFD0]/5 border-[#E8DFD0]/10 text-[#E8DFD0]/70 hover:border-[#E8DFD0]/20 hover:bg-[#E8DFD0]/10'}`}
+                      className={`flex items-center gap-3 px-4 py-3.5 text-sm text-left border rounded-none transition-all ${language === lang.code ? 'bg-[#080806]/10 border-[#080806] text-[#C9603A] font-bold' : 'bg-white border-[#080806]/15 text-[#080806]/85 hover:border-[#080806]/30 hover:bg-[#080806]/5'}`}
                     >
                       <span className="text-lg">{lang.flag}</span>
-                      <span className="font-medium tracking-wide">{lang.label}</span>
+                      <span className="font-bold tracking-wide">{lang.label}</span>
                     </button>
                   ))}
                 </div>
@@ -342,7 +404,7 @@ export default function Navbar() {
             </div>
 
             {/* Modal Footer */}
-            <div className="p-4 border-t border-[#E8DFD0]/10 bg-black/20 text-center text-xs text-[#E8DFD0]/40 flex justify-center items-center gap-2">
+            <div className="p-4 border-t border-[#080806]/15 bg-[#F4F0EA] text-center text-xs text-[#080806]/60 flex justify-center items-center gap-2 font-bold">
               <span>⚡ Supports all international languages seamlessly via hybrid translation</span>
             </div>
 

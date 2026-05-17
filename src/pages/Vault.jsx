@@ -176,25 +176,25 @@ export default function Vault() {
           BOLD & BESPOKE
         </Link>
         <div className="space-y-8 flex-1">
-          <button onClick={() => setActiveTab("vault")} className={`flex items-center gap-4 text-xs uppercase tracking-[0.2em] transition-colors font-bold ${activeTab === 'vault' ? 'text-[#C9603A]' : 'text-[#080806]/70 hover:text-[#080806]'}`}>
-            <LayoutDashboard size={18} strokeWidth={2} />
+          <button onClick={() => setActiveTab("vault")} className={`flex items-center gap-4 text-xs uppercase tracking-[0.2em] transition-colors font-extrabold ${activeTab === 'vault' ? 'text-[#C9603A]' : 'text-[#080806] hover:text-[#C9603A]'}`}>
+            <LayoutDashboard size={18} strokeWidth={2.5} />
             The Vault
           </button>
-          <button onClick={() => setActiveTab("projects")} className={`flex items-center gap-4 text-xs uppercase tracking-[0.2em] transition-colors font-bold ${activeTab === 'projects' ? 'text-[#C9603A]' : 'text-[#080806]/70 hover:text-[#080806]'}`}>
-            <FolderKanban size={18} strokeWidth={2} />
+          <button onClick={() => setActiveTab("projects")} className={`flex items-center gap-4 text-xs uppercase tracking-[0.2em] transition-colors font-extrabold ${activeTab === 'projects' ? 'text-[#C9603A]' : 'text-[#080806] hover:text-[#C9603A]'}`}>
+            <FolderKanban size={18} strokeWidth={2.5} />
             My Projects
           </button>
-          <button onClick={() => setActiveTab("vault")} className="flex items-center gap-4 text-xs uppercase tracking-[0.2em] text-[#080806]/50 hover:text-[#080806] transition-colors font-bold">
-            <Heart size={18} strokeWidth={2} />
+          <button onClick={() => setActiveTab("vault")} className="flex items-center gap-4 text-xs uppercase tracking-[0.2em] text-[#080806] hover:text-[#C9603A] transition-colors font-extrabold">
+            <Heart size={18} strokeWidth={2.5} />
             Saved Items
           </button>
-          <button onClick={() => setActiveTab("account")} className={`flex items-center gap-4 text-xs uppercase tracking-[0.2em] transition-colors font-bold ${activeTab === 'account' ? 'text-[#C9603A]' : 'text-[#080806]/70 hover:text-[#080806]'}`}>
-            <Settings size={18} strokeWidth={2} />
+          <button onClick={() => setActiveTab("account")} className={`flex items-center gap-4 text-xs uppercase tracking-[0.2em] transition-colors font-extrabold ${activeTab === 'account' ? 'text-[#C9603A]' : 'text-[#080806] hover:text-[#C9603A]'}`}>
+            <Settings size={18} strokeWidth={2.5} />
             Account
           </button>
         </div>
-        <button onClick={handleLogout} className="flex items-center gap-4 text-xs uppercase tracking-[0.2em] text-[#080806]/50 hover:text-[#C9603A] transition-colors pt-8 border-t border-[#080806]/15 font-bold">
-          <LogOut size={18} strokeWidth={2} />
+        <button onClick={handleLogout} className="flex items-center gap-4 text-xs uppercase tracking-[0.2em] text-[#080806] hover:text-[#C9603A] transition-colors pt-8 border-t border-[#080806]/15 font-extrabold">
+          <LogOut size={18} strokeWidth={2.5} />
           Sign Out
         </button>
       </div>
@@ -325,11 +325,11 @@ export default function Vault() {
               {/* Referrals Card */}
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white border border-[#080806]/15 p-12 flex flex-col justify-center shadow-sm hover:shadow-md transition-all duration-300">
                 <h3 className="text-3xl font-serif font-light mb-2 text-[#080806]">Refer a Friend</h3>
-                <p className="text-[#080806]/50 text-sm font-semibold mb-8 italic">Share the Aura experience and they get 10% off.</p>
+                <p className="text-[#080806]/85 text-sm font-extrabold mb-8 italic">Share the Aura experience and they get 10% off.</p>
                 <div className="bg-[#F4F0EA] border border-[#080806]/15 p-5 text-sm tracking-widest text-center mb-6 text-[#080806] font-bold">
                   BOLDANDBESPOKE.CO.ZA/REF/JANE-D
                 </div>
-                <button className="text-xs uppercase tracking-widest text-[#080806] border-b border-[#080806] pb-2 self-start hover:text-[#C9603A] hover:border-[#C9603A] transition-colors font-bold">Copy Link</button>
+                <button className="text-xs uppercase tracking-widest text-[#080806] border-b border-[#080806] pb-2 self-start hover:text-[#C9603A] hover:border-[#C9603A] transition-colors font-extrabold">Copy Link</button>
               </motion.div>
             </div>
           </>
