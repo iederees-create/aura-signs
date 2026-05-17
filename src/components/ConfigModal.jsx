@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
+  const { t } = useLanguage();
+
   if (!isOpen || !product) return null;
 
   const [options, setOptions] = useState({});
@@ -104,7 +107,7 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
         {/* Modal Header */}
         <div className="p-6 border-b border-[#E8DFD0]/10 flex items-center justify-between">
           <div>
-            <span className="text-[#C9A96E] text-xs font-medium uppercase tracking-widest">Configure Option</span>
+            <span className="text-[#C9A96E] text-xs font-medium uppercase tracking-widest">{t('config.configureOption')}</span>
             <h3 className="font-serif text-2xl tracking-wide mt-1">{product.name}</h3>
           </div>
           <button 
@@ -124,7 +127,7 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
           {(name.includes('wedding signage') || name.includes('acrylic displays') || name.includes('qr code')) && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">Material</label>
+                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">{t('config.material')}</label>
                 <div className="grid grid-cols-2 gap-2">
                   {['Clear Acrylic', 'Frosted Acrylic', 'Gold Mirror', 'Foam Board'].map((mat) => (
                     <button
@@ -139,11 +142,11 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">Size</label>
+                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">{t('config.size')}</label>
                 <select
                   value={options.size}
                   onChange={(e) => handleOptionChange('size', e.target.value)}
-                  className="w-full bg-[#E8DFD0]/5 border border-[#E8DFD0]/10 rounded-lg p-3 text-sm text-[#E8DFD0] focus:outline-none focus:border-[#C9A96E]"
+                  className="w-full bg-[#080806] text-[#E8DFD0] border border-[#E8DFD0]/10 rounded-lg p-3 text-sm focus:outline-none focus:border-[#C9A96E]"
                 >
                   <option className="bg-[#080806] text-[#E8DFD0]" value="A1 (841 x 594 mm)">A1 (841 x 594 mm) — Recommended for welcomes</option>
                   <option className="bg-[#080806] text-[#E8DFD0]" value="A2 (594 x 420 mm)">A2 (594 x 420 mm)</option>
@@ -158,7 +161,7 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
           {name.includes('seating charts') && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">Guest Count</label>
+                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">{t('config.guestCount')}</label>
                 <div className="grid grid-cols-2 gap-2">
                   {['Under 50 guests', '50 - 100 guests', '100 - 150 guests', '150+ guests'].map((g) => (
                     <button
@@ -173,11 +176,11 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">Base Material</label>
+                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">{t('config.baseMaterial')}</label>
                 <select
                   value={options.material}
                   onChange={(e) => handleOptionChange('material', e.target.value)}
-                  className="w-full bg-[#E8DFD0]/5 border border-[#E8DFD0]/10 rounded-lg p-3 text-sm text-[#E8DFD0] focus:outline-none focus:border-[#C9A96E]"
+                  className="w-full bg-[#080806] text-[#E8DFD0] border border-[#E8DFD0]/10 rounded-lg p-3 text-sm focus:outline-none focus:border-[#C9A96E]"
                 >
                   <option className="bg-[#080806] text-[#E8DFD0]" value="Clear Acrylic">Clear Acrylic Board</option>
                   <option className="bg-[#080806] text-[#E8DFD0]" value="Frosted Acrylic">Frosted Acrylic Board</option>
@@ -192,7 +195,7 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
           {name.includes('mirror') && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">Mirror Style</label>
+                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">{t('config.mirrorStyle')}</label>
                 <div className="grid grid-cols-2 gap-2">
                   {['Gold Mirror', 'Silver Mirror', 'Rose Gold Mirror', 'Bespoke Vintage Mirror'].map((mir) => (
                     <button
@@ -212,11 +215,11 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
           {name.includes('stationery') && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">Stationery Item</label>
+                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">{t('config.stationeryItem')}</label>
                 <select
                   value={options.itemType}
                   onChange={(e) => handleOptionChange('itemType', e.target.value)}
-                  className="w-full bg-[#E8DFD0]/5 border border-[#E8DFD0]/10 rounded-lg p-3 text-sm text-[#E8DFD0] focus:outline-none focus:border-[#C9A96E]"
+                  className="w-full bg-[#080806] text-[#E8DFD0] border border-[#E8DFD0]/10 rounded-lg p-3 text-sm focus:outline-none focus:border-[#C9A96E]"
                 >
                   <option className="bg-[#080806] text-[#E8DFD0]" value="Invitations">Main Wedding Invitations</option>
                   <option className="bg-[#080806] text-[#E8DFD0]" value="Menus">Table Menus</option>
@@ -227,7 +230,7 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">Paper Stock</label>
+                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">{t('config.paperStock')}</label>
                 <div className="grid grid-cols-2 gap-2">
                   {['Premium Matte', 'Linen Textured', 'Handmade Deckled Edge', 'Metallic Pearl'].map((stock) => (
                     <button
@@ -247,11 +250,11 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
           {(name.includes('backdrops') || name.includes('hire')) && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">Backdrop Type</label>
+                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">{t('config.backdropType')}</label>
                 <select
                   value={options.backdropType}
                   onChange={(e) => handleOptionChange('backdropType', e.target.value)}
-                  className="w-full bg-[#E8DFD0]/5 border border-[#E8DFD0]/10 rounded-lg p-3 text-sm text-[#E8DFD0] focus:outline-none focus:border-[#C9A96E]"
+                  className="w-full bg-[#080806] text-[#E8DFD0] border border-[#E8DFD0]/10 rounded-lg p-3 text-sm focus:outline-none focus:border-[#C9A96E]"
                 >
                   <option className="bg-[#080806] text-[#E8DFD0]" value="Arch Board">Wooden Arch Backdrop Board</option>
                   <option className="bg-[#080806] text-[#E8DFD0]" value="Sail Board Panel">Modern Sail Board Panel (Set of 2)</option>
@@ -266,7 +269,7 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
           {name.includes('balloon') && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">Length</label>
+                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">{t('config.length')}</label>
                 <div className="grid grid-cols-3 gap-2">
                   {['2 Meters', '3 Meters', '4+ Meters'].map((len) => (
                     <button
@@ -286,11 +289,11 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
           {name.includes('business cards') && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">Finish Options</label>
+                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">{t('config.finishOptions')}</label>
                 <select
                   value={options.finish}
                   onChange={(e) => handleOptionChange('finish', e.target.value)}
-                  className="w-full bg-[#E8DFD0]/5 border border-[#E8DFD0]/10 rounded-lg p-3 text-sm text-[#E8DFD0] focus:outline-none focus:border-[#C9A96E]"
+                  className="w-full bg-[#080806] text-[#E8DFD0] border border-[#E8DFD0]/10 rounded-lg p-3 text-sm focus:outline-none focus:border-[#C9A96E]"
                 >
                   <option className="bg-[#080806] text-[#E8DFD0]" value="Soft-touch lamination">Luxury Soft-touch Lamination (Velvet feel)</option>
                   <option className="bg-[#080806] text-[#E8DFD0]" value="Spot UV detailing">Premium Matte + Spot UV Gloss Details</option>
@@ -305,7 +308,7 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
           {name.includes('stickers') && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">Shape</label>
+                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">{t('config.shape')}</label>
                 <div className="grid grid-cols-3 gap-2">
                   {['Round', 'Square', 'Custom Die-cut'].map((sh) => (
                     <button
@@ -325,7 +328,7 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
           {name.includes('decals') && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">Installation Type</label>
+                <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider mb-2">{t('config.installationType')}</label>
                 <div className="grid grid-cols-2 gap-2">
                   {['DIY Application', 'Professional installation requested'].map((inst) => (
                     <button
@@ -343,7 +346,7 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
 
           {/* Quantity selector */}
           <div className="pt-4 border-t border-[#E8DFD0]/10 flex items-center justify-between">
-            <span className="text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider">Quantity</span>
+            <span className="text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider">{t('config.quantity')}</span>
             <div className="flex items-center gap-4 bg-[#E8DFD0]/5 border border-[#E8DFD0]/10 rounded-full px-4 py-2">
               <button 
                 onClick={() => setQuantity(q => Math.max(1, q - (name.includes('card') || name.includes('sticker') ? 50 : 1)))}
@@ -363,11 +366,11 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
 
           {/* Details / Text area */}
           <div className="space-y-2">
-            <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider">Custom Signage Details & Wording</label>
+            <label className="block text-xs font-semibold text-[#E8DFD0]/60 uppercase tracking-wider">{t('config.customNotesLabel')}</label>
             <textarea
               value={customNotes}
               onChange={(e) => setCustomNotes(e.target.value)}
-              placeholder="e.g. Wording: 'Welcome to the Wedding of Jack & Emma'. Font preferences, colors, custom dimensions, or delivery address..."
+              placeholder={t('config.customNotesPlaceholder')}
               className="w-full h-24 bg-[#E8DFD0]/5 border border-[#E8DFD0]/10 rounded-lg p-4 text-[#E8DFD0] placeholder-[#E8DFD0]/30 focus:border-[#C9A96E]/50 focus:outline-none transition-colors text-sm resize-none"
             />
           </div>
@@ -380,14 +383,14 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
             onClick={onClose}
             className="flex-1 border border-[#E8DFD0]/10 py-3.5 hover:bg-[#E8DFD0]/5 transition-colors uppercase tracking-widest text-xs font-medium rounded-lg"
           >
-            Cancel
+            {t('config.cancel')}
           </button>
           <button
             onClick={handleSave}
             className="flex-1 btn-primary py-3.5 flex items-center justify-center gap-2 text-xs font-medium tracking-widest uppercase rounded-lg"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-            Add to Quote
+            {t('config.addToQuote')}
           </button>
         </div>
 

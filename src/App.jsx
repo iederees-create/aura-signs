@@ -10,6 +10,7 @@ import About from "./pages/About";
 import FloatingWhatsApp from "./components/FloatingWhatsApp";
 import Navbar from "./components/Navbar";
 import { QuoteProvider, useQuote } from "./context/QuoteContext";
+import { LanguageProvider } from "./context/LanguageContext";
 import QuoteDrawer from "./components/QuoteDrawer";
 import ConfigModal from "./components/ConfigModal";
 
@@ -43,8 +44,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <QuoteProvider>
-      <AppContent />
-    </QuoteProvider>
+    <LanguageProvider>
+      <QuoteProvider>
+        <AppContent />
+      </QuoteProvider>
+    </LanguageProvider>
   );
 }

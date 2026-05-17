@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useQuote } from '../context/QuoteContext';
+import { useLanguage } from '../context/LanguageContext';
 import { EMAILJS_CONFIG } from '../config/emailjs';
 import { supabase } from '../lib/supabase';
 
 export default function QuoteDrawer() {
   const { basket, isDrawerOpen, closeDrawer, removeFromBasket } = useQuote();
+  const { t } = useLanguage();
   const [generalNotes, setGeneralNotes] = useState('');
   const [clientName, setClientName] = useState('');
   const [clientEmail, setClientEmail] = useState('');
@@ -40,7 +42,7 @@ export default function QuoteDrawer() {
 
   const handleCheckout = async () => {
     if (!clientName.trim() || !clientEmail.trim()) {
-      setErrorMsg('Please enter your Name and Email to request a quote.');
+      setErrorMsg(t('drawer.errorEmptyFields'));
       return;
     }
     setErrorMsg('');
@@ -131,8 +133,10 @@ export default function QuoteDrawer() {
         {/* Header */}
         <div className="p-8 border-b border-[#E8DFD0]/10 flex items-center justify-between">
           <div>
-            <h2 className="font-serif text-2xl tracking-wide">Quote Basket</h2>
-            <p className="text-[#C9A96E] text-xs mt-1">{basket.length} {basket.length === 1 ? 'item' : 'items'} selected</p>
+            <h2 className="font-serif text-2xl tracking-wide">{t('drawer.basketTitle')}</h2>
+            <p className="text-[#C9A96E] text-xs mt-1">
+              {basket.length} {basket.length === 1 ? t('drawer.itemCount') : t('drawer.itemsCount')}
+            </p>
           </div>
           <button 
             onClick={closeDrawer}
@@ -148,14 +152,14 @@ export default function QuoteDrawer() {
             <div className="h-64 flex flex-col items-center justify-center text-center space-y-4">
               <svg className="text-[#C9A96E]/30" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
               <div>
-                <p className="font-serif text-lg">Your basket is empty</p>
-                <p className="text-[#E8DFD0]/40 text-sm mt-1">Browse our services and click 'Add to Basket' to configure your custom signs.</p>
+                <p className="font-serif text-lg">{t('drawer.emptyBasket')}</p>
+                <p className="text-[#E8DFD0]/40 text-sm mt-1">{t('drawer.emptyBasketDesc')}</p>
               </div>
               <button 
                 onClick={closeDrawer}
                 className="btn-primary mt-4 py-3 px-6 text-sm"
               >
-                Start building
+                {t('drawer.startBuilding')}
               </button>
             </div>
           ) : (
@@ -203,11 +207,11 @@ export default function QuoteDrawer() {
 
               {/* Contact Details Form */}
               <div className="space-y-4 pt-6 border-t border-[#E8DFD0]/10">
-                <h3 className="text-xs uppercase tracking-[0.2em] text-[#C9A96E] font-medium">Your Details</h3>
+                <h3 className="text-xs uppercase tracking-[0.2em] text-[#C9A96E] font-medium">{t('drawer.yourDetails')}</h3>
                 
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-[10px] text-[#E8DFD0]/60 uppercase tracking-wider mb-1.5">Full Name</label>
+                    <label className="block text-[10px] text-[#E8DFD0]/60 uppercase tracking-wider mb-1.5">{t('drawer.fullName')}</label>
                     <input 
                       type="text"
                       required
@@ -218,7 +222,7 @@ export default function QuoteDrawer() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] text-[#E8DFD0]/60 uppercase tracking-wider mb-1.5">Email Address</label>
+                    <label className="block text-[10px] text-[#E8DFD0]/60 uppercase tracking-wider mb-1.5">{t('drawer.emailAddress')}</label>
                     <input 
                       type="email"
                       required
@@ -233,11 +237,11 @@ export default function QuoteDrawer() {
 
               {/* General Note */}
               <div className="space-y-3 pt-6 border-t border-[#E8DFD0]/10">
-                <label className="block text-[10px] text-[#E8DFD0]/60 uppercase tracking-wider">Event Details & Date (Optional)</label>
+                <label className="block text-[10px] text-[#E8DFD0]/60 uppercase tracking-wider">{t('drawer.eventDetailsLabel')}</label>
                 <textarea 
                   value={generalNotes}
                   onChange={(e) => setGeneralNotes(e.target.value)}
-                  placeholder="e.g. Wedding Date: 2026-10-18, Palette: Sage & Gold, Venue: Cape Town..."
+                  placeholder={t('drawer.eventDetailsPlaceholder')}
                   className="w-full h-24 bg-[#E8DFD0]/5 border border-[#E8DFD0]/10 rounded-xl p-4 text-[#E8DFD0] placeholder-[#E8DFD0]/30 focus:border-[#C9A96E]/50 focus:outline-none transition-colors text-sm resize-none"
                 />
               </div>
@@ -255,7 +259,7 @@ export default function QuoteDrawer() {
         {basket.length > 0 && (
           <div className="p-8 border-t border-[#E8DFD0]/10 space-y-4 bg-black/40">
             <div className="text-center text-xs text-[#E8DFD0]/50">
-              ⚡ Your custom selections will automatically compile.
+              {t('drawer.compileNote')}
             </div>
             <button 
               onClick={handleCheckout}
@@ -268,12 +272,12 @@ export default function QuoteDrawer() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                   </svg>
-                  Submitting Request...
+                  {t('drawer.submittingStatus')}
                 </>
               ) : (
                 <>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.555 4.126 1.526 5.864L.053 23.27a.75.75 0 00.917.928l5.521-1.448A11.96 11.96 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.712 9.712 0 01-4.944-1.352l-.354-.211-3.674.964.979-3.567-.231-.368A9.714 9.714 0 012.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/></svg>
-                  Request Quote via WhatsApp
+                  {t('drawer.requestButton')}
                 </>
               )}
             </button>
