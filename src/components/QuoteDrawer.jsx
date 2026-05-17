@@ -16,7 +16,7 @@ export default function QuoteDrawer() {
   if (!isDrawerOpen) return null;
 
   const compileWhatsAppMessage = () => {
-    let msg = `Hi Bespoke! 🎨✨\n\nMy name is *${clientName}* (${clientEmail}).\n\nI would like to request a custom signage & styling quote for the following items:\n\n`;
+    let msg = `Hi Bold & Bespoke! 🎨✨\n\nMy name is *${clientName}* (${clientEmail}).\n\nI would like to request a custom signage & styling quote for the following items:\n\n`;
     basket.forEach((item, index) => {
       msg += `${index + 1}. *${item.name}*\n`;
       if (item.options) {

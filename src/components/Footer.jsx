@@ -6,7 +6,7 @@ export default function Footer() {
     <footer className="landing-footer">
       <div className="footer-grid">
         <div className="footer-brand">
-          <Link to="/" className="nav-logo" style={{ fontSize: '24px' }}>Bespo<span>k</span>e</Link>
+          <Link to="/" className="nav-logo" style={{ fontSize: '24px' }}>Bold & Bespo<span>k</span>e</Link>
           <p>Custom signage, event styling, and business branding. Designed and produced in Cape Town, South Africa.</p>
           <p style={{ marginTop: '1rem', fontSize: '12px', color: 'rgba(201,169,110,0.6)' }}>Secure payments via Yoco — coming soon</p>
         </div>
@@ -42,7 +42,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>© 2025 Bespoke. All rights reserved. Cape Town, South Africa.</p>
+        <p>© 2025 Bold & Bespoke. All rights reserved. Cape Town, South Africa.</p>
         <div className="footer-social">
           <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
           <a href="https://wa.me/27662720491" target="_blank" rel="noopener noreferrer">WhatsApp</a>

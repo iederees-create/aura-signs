@@ -55,7 +55,7 @@ export default function Auth() {
         className="w-full max-w-md relative z-10"
       >
         <Link to="/" className="block text-center mb-8 font-serif font-light tracking-[0.2em] text-[#E8DFD0] text-3xl">
-          BESPOKE
+          BOLD & BESPOKE
         </Link>
         
         <div className="glass-panel p-10 rounded-none relative">

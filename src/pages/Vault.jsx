@@ -67,7 +67,7 @@ export default function Vault() {
     setQuoteSubmitted(true);
     setTimeout(() => {
       setShowQuoteForm(false);
-      const whatsappMsg = encodeURIComponent(`Hi Bespoke! I have submitted a quote request from my Vault for my wedding on ${e.target.weddingDate.value} at ${e.target.venue.value}.`);
+      const whatsappMsg = encodeURIComponent(`Hi Bold & Bespoke! I have submitted a quote request from my Vault for my wedding on ${e.target.weddingDate.value} at ${e.target.venue.value}.`);
       window.open(`https://wa.me/27123456789?text=${whatsappMsg}`, '_blank');
     }, 2000);
   };
@@ -112,7 +112,7 @@ export default function Vault() {
       {/* Sidebar */}
       <div className="w-80 border-r border-[#E8DFD0]/5 p-12 flex flex-col hidden lg:flex">
         <Link to="/" className="font-serif font-light tracking-[0.2em] text-[#E8DFD0] text-3xl mb-20">
-          BESPOKE
+          BOLD & BESPOKE
         </Link>
         <div className="space-y-8 flex-1">
           <button onClick={() => setActiveTab("vault")} className={`flex items-center gap-4 text-xs uppercase tracking-[0.2em] transition-colors ${activeTab === 'vault' ? 'text-[#E8DFD0]' : 'text-[#E8DFD0]/40 hover:text-[#E8DFD0]'}`}>
@@ -268,7 +268,7 @@ export default function Vault() {
               <h3 className="text-2xl font-display font-semibold mb-2">Refer a Friend</h3>
               <p className="text-[#E8DFD0]/40 text-sm font-light mb-8 italic">Share the Aura experience and they get 10% off.</p>
               <div className="bg-[#080806] border border-[#E8DFD0]/10 p-4 text-[10px] uppercase tracking-widest text-center mb-6 text-[#E8DFD0]/60">
-                BESPOKE.CO.ZA/REF/JANE-D
+                BOLDANDBESPOKE.CO.ZA/REF/JANE-D
               </div>
               <button className="text-xs uppercase tracking-widest text-[#E8DFD0] border-b border-[#E8DFD0] pb-2 self-start hover:text-[#C9603A] hover:border-[#C9603A] transition-colors">Copy Link</button>
             </motion.div>

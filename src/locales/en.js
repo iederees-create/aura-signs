@@ -12,7 +12,7 @@ export const en = {
   
   // Hero Section
   hero: {
-    label: "Bespoke Event Styling & Signs",
+    label: "Bold & Bespoke Event Styling & Signs",
     title: "Luxury Signage & Artful Details",
     subtitle: "Handcrafted welcome boards, interactive seating arrangements, bar menus, and elegant backdrops designed uniquely for your Cape Town events.",
     ctaServices: "Explore Services",

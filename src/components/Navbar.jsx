@@ -71,7 +71,7 @@ export default function Navbar() {
   return (
     <>
       <nav id="main-nav" className={`landing-nav ${isScrolled ? 'scrolled' : ''}`}>
-        <Link to="/" className="nav-logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Bespo<span>k</span>e</Link>
+        <Link to="/" className="nav-logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Bold & Bespo<span>k</span>e</Link>
         <ul className="nav-links">
           <li><Link to="/" className={location.pathname === '/' ? 'active' : ''} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>{t('nav.home')}</Link></li>
           <li><Link to="/services" className={location.pathname === '/services' ? 'active' : ''} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>{t('nav.services')}</Link></li>

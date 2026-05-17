@@ -33,7 +33,7 @@ export default function About() {
             <div className="about-tag">Est. Cape Town</div>
           </div>
           <div className="about-content">
-            <p className="section-label">About Bespoke</p>
+            <p className="section-label">About Bold & Bespoke</p>
             <h2 className="section-headline">Creative signage<br />with a <em>premium</em> touch</h2>
             <p className="section-body">
               We specialise in modern, elegant, and fully customised signage for events and businesses of all sizes. From intimate celebrations to large corporate activations, every piece is designed and produced to reflect your vision — with the quality to match.

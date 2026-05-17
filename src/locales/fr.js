@@ -12,7 +12,7 @@ export const fr = {
   
   // Hero Section
   hero: {
-    label: "Design d'Événements & Signalétique Bespoke",
+    label: "Design d'Événements & Signalétique Bold & Bespoke",
     title: "Signalétique de Luxe & Détails Artistiques",
     subtitle: "Panneaux d'accueil faits main, plans de table interactifs, menus de bar et décors d'arche élégants conçus de façon unique pour vos mariages et événements.",
     ctaServices: "Découvrir Nos Offres",

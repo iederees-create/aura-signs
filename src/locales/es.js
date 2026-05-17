@@ -12,7 +12,7 @@ export const es = {
   
   // Hero Section
   hero: {
-    label: "Diseño & Letreros Personalizados para Eventos",
+    label: "Diseño & Letreros Bold & Bespoke para Eventos",
     title: "Señalización de Lujo & Detalles Únicos",
     subtitle: "Paneles de bienvenida hechos a mano, planos de distribución interactivos, menús de bar y hermosos arcos de fondo diseñados exclusivamente para tus bodas y eventos.",
     ctaServices: "Explorar Servicios",

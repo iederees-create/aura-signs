@@ -12,7 +12,7 @@ export const de = {
   
   // Hero Section
   hero: {
-    label: "Bespoke Event-Design & Beschilderung",
+    label: "Bold & Bespoke Event-Design & Beschilderung",
     title: "Luxus-Beschilderung & Kunstvolle Details",
     subtitle: "Handgefertigte Willkommenstafeln, interaktive Sitzpläne, Barmenüs und elegante Bögen – exklusiv entworfen für Ihre Hochzeiten und Events.",
     ctaServices: "Dienstleistungen erkunden",
