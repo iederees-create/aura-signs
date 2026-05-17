@@ -91,15 +91,15 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
   const name = product.name.toLowerCase();
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 md:p-8">
       {/* Backdrop */}
       <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-300 animate-fade-in"
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm transition-opacity duration-300 animate-fade-in"
         onClick={onClose}
       />
 
       {/* Modal Dialog */}
-      <div className="relative w-full max-w-xl bg-[#080806] border border-[#E8DFD0]/10 rounded-2xl text-[#E8DFD0] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden z-10 animate-scale-up">
+      <div className="relative w-full max-w-xl bg-[#080806] border border-[#E8DFD0]/10 rounded-2xl text-[#E8DFD0] shadow-2xl flex flex-col max-h-[82vh] overflow-hidden z-10 animate-scale-up">
         
         {/* Modal Header */}
         <div className="p-6 border-b border-[#E8DFD0]/10 flex items-center justify-between">
