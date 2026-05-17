@@ -10,9 +10,9 @@ const dictionaries = { en, fr, de, es };
 
 export function LanguageProvider({ children }) {
   const [language, setLanguage] = useState(() => {
-    // 1. Check local storage override
+    // 1. Check local storage override (can be handcrafted or universal)
     const saved = localStorage.getItem('bespoke_language');
-    if (saved && dictionaries[saved]) return saved;
+    if (saved) return saved;
 
     // 2. Check browser locale preference
     const browserLang = navigator.language || (navigator.languages && navigator.languages[0]);
@@ -26,6 +26,32 @@ export function LanguageProvider({ children }) {
 
   useEffect(() => {
     localStorage.setItem('bespoke_language', language);
+  }, [language]);
+
+  // Load Google Translate script dynamically if a universal language is active
+  useEffect(() => {
+    const isUniversal = !['en', 'fr', 'de', 'es'].includes(language);
+    
+    if (isUniversal) {
+      // Define global init callback
+      if (!window.googleTranslateElementInit) {
+        window.googleTranslateElementInit = () => {
+          new window.googleTranslate.TranslateElement({
+            pageLanguage: 'en',
+            layout: window.googleTranslate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+          }, 'google_translate_element');
+        };
+      }
+      
+      // Inject Google Translate script if not present
+      if (!document.getElementById('google-translate-script')) {
+        const script = document.createElement('script');
+        script.id = 'google-translate-script';
+        script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+        document.body.appendChild(script);
+      }
+    }
   }, [language]);
 
   useEffect(() => {
@@ -59,8 +85,43 @@ export function LanguageProvider({ children }) {
   }, []);
 
   const changeLanguage = (lang) => {
-    if (dictionaries[lang]) {
+    const isCurrentHandcrafted = ['en', 'fr', 'de', 'es'].includes(language);
+    const isTargetHandcrafted = ['en', 'fr', 'de', 'es'].includes(lang);
+
+    if (isTargetHandcrafted) {
+      // 1. Delete Google Translate cookies to restore clean original English
+      const deleteCookie = (name) => {
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname};`;
+        document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${window.location.hostname.split('.').slice(-2).join('.')};`;
+      };
+      
+      deleteCookie('googtrans');
+      
+      localStorage.setItem('bespoke_language', lang);
       setLanguage(lang);
+
+      // Force a reload if switching from a universal machine-translated language to restore clean DOM
+      if (!isCurrentHandcrafted) {
+        window.location.reload();
+      }
+    } else {
+      // 2. Target is a universal language - set the googtrans cookie
+      const hostname = window.location.hostname;
+      document.cookie = `googtrans=/en/${lang}; path=/;`;
+      document.cookie = `googtrans=/en/${lang}; path=/; domain=${hostname};`;
+      
+      // Handle wildcard / parent subdomains
+      const domainParts = hostname.split('.');
+      if (domainParts.length > 1) {
+        document.cookie = `googtrans=/en/${lang}; path=/; domain=.${domainParts.slice(-2).join('.')};`;
+      }
+
+      localStorage.setItem('bespoke_language', lang);
+      setLanguage(lang);
+
+      // Reload to let Google Translate intercept and translate on page refresh
+      window.location.reload();
     }
   };
 
@@ -69,7 +130,10 @@ export function LanguageProvider({ children }) {
     const keys = path.split('.');
     
     // Resolve active language translation
-    let value = dictionaries[language];
+    // If language is universal (e.g. Italian 'it'), we use 'en' as the handcrafted dictionary fallback
+    // (so the original DOM renders pristine English text, allowing Google Translate to translate it perfectly!)
+    const activeDictCode = dictionaries[language] ? language : 'en';
+    let value = dictionaries[activeDictCode];
     let found = true;
     
     for (const key of keys) {
@@ -98,6 +162,8 @@ export function LanguageProvider({ children }) {
   return (
     <LanguageContext.Provider value={{ language, changeLanguage, t }}>
       {children}
+      {/* Container required for Google Translate initialization (completely hidden) */}
+      <div id="google_translate_element" style={{ display: 'none', position: 'absolute', width: 0, height: 0, opacity: 0 }} />
     </LanguageContext.Provider>
   );
 }

@@ -121,3 +121,29 @@ select option {
 }
 
 
+/* ── GOOGLE TRANSLATE ULTRA-PREMIUM HIDE OVERRIDES ── */
+.goog-te-banner-frame.skiptranslate,
+.goog-te-banner-frame,
+iframe.goog-te-banner-frame,
+.goog-te-balloon-frame {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+body {
+  top: 0px !important;
+}
+
+#goog-gt-tt,
+.goog-gt-tt {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+.goog-text-highlight {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
