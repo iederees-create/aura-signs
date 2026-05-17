@@ -99,7 +99,7 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
       />
 
       {/* Modal Dialog */}
-      <div className="relative w-full max-w-xl bg-[#080806] border border-[#E8DFD0]/10 rounded-2xl text-[#E8DFD0] shadow-2xl flex flex-col max-h-[82vh] overflow-hidden z-10 animate-scale-up">
+      <div className="relative w-full max-w-xl bg-[#080806] border border-[#E8DFD0]/10 rounded-2xl text-[#E8DFD0] shadow-2xl flex flex-col max-h-[76vh] overflow-hidden z-10 animate-scale-up">
         
         {/* Modal Header */}
         <div className="p-6 border-b border-[#E8DFD0]/10 flex items-center justify-between">
@@ -145,10 +145,10 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
                   onChange={(e) => handleOptionChange('size', e.target.value)}
                   className="w-full bg-[#E8DFD0]/5 border border-[#E8DFD0]/10 rounded-lg p-3 text-sm text-[#E8DFD0] focus:outline-none focus:border-[#C9A96E]"
                 >
-                  <option value="A1 (841 x 594 mm)">A1 (841 x 594 mm) — Recommended for welcomes</option>
-                  <option value="A2 (594 x 420 mm)">A2 (594 x 420 mm)</option>
-                  <option value="A3 (420 x 297 mm)">A3 (420 x 297 mm)</option>
-                  <option value="Custom size">Custom Dimensions (mention in details below)</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="A1 (841 x 594 mm)">A1 (841 x 594 mm) — Recommended for welcomes</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="A2 (594 x 420 mm)">A2 (594 x 420 mm)</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="A3 (420 x 297 mm)">A3 (420 x 297 mm)</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="Custom size">Custom Dimensions (mention in details below)</option>
                 </select>
               </div>
             </div>
@@ -179,10 +179,10 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
                   onChange={(e) => handleOptionChange('material', e.target.value)}
                   className="w-full bg-[#E8DFD0]/5 border border-[#E8DFD0]/10 rounded-lg p-3 text-sm text-[#E8DFD0] focus:outline-none focus:border-[#C9A96E]"
                 >
-                  <option value="Clear Acrylic">Clear Acrylic Board</option>
-                  <option value="Frosted Acrylic">Frosted Acrylic Board</option>
-                  <option value="Gold Mirror">Luxury Gold Mirror</option>
-                  <option value="Eco Foam Board">Eco-friendly Foam Board</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="Clear Acrylic">Clear Acrylic Board</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="Frosted Acrylic">Frosted Acrylic Board</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="Gold Mirror">Luxury Gold Mirror</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="Eco Foam Board">Eco-friendly Foam Board</option>
                 </select>
               </div>
             </div>
@@ -218,11 +218,11 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
                   onChange={(e) => handleOptionChange('itemType', e.target.value)}
                   className="w-full bg-[#E8DFD0]/5 border border-[#E8DFD0]/10 rounded-lg p-3 text-sm text-[#E8DFD0] focus:outline-none focus:border-[#C9A96E]"
                 >
-                  <option value="Invitations">Main Wedding Invitations</option>
-                  <option value="Menus">Table Menus</option>
-                  <option value="Place Cards">Name / Place Cards</option>
-                  <option value="Ceremony Programs">Service / Ceremony Programs</option>
-                  <option value="Complete Suite">Complete Stationery Suite</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="Invitations">Main Wedding Invitations</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="Menus">Table Menus</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="Place Cards">Name / Place Cards</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="Ceremony Programs">Service / Ceremony Programs</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="Complete Suite">Complete Stationery Suite</option>
                 </select>
               </div>
 
@@ -253,10 +253,10 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
                   onChange={(e) => handleOptionChange('backdropType', e.target.value)}
                   className="w-full bg-[#E8DFD0]/5 border border-[#E8DFD0]/10 rounded-lg p-3 text-sm text-[#E8DFD0] focus:outline-none focus:border-[#C9A96E]"
                 >
-                  <option value="Arch Board">Wooden Arch Backdrop Board</option>
-                  <option value="Sail Board Panel">Modern Sail Board Panel (Set of 2)</option>
-                  <option value="Circle Ring Mesh">Golden Circle Ring / Mesh Frame</option>
-                  <option value="Shimmer Wall">Glitter Shimmer Wall Panels</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="Arch Board">Wooden Arch Backdrop Board</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="Sail Board Panel">Modern Sail Board Panel (Set of 2)</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="Circle Ring Mesh">Golden Circle Ring / Mesh Frame</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="Shimmer Wall">Glitter Shimmer Wall Panels</option>
                 </select>
               </div>
             </div>
@@ -292,10 +292,10 @@ export default function ConfigModal({ isOpen, onClose, product, onConfirm }) {
                   onChange={(e) => handleOptionChange('finish', e.target.value)}
                   className="w-full bg-[#E8DFD0]/5 border border-[#E8DFD0]/10 rounded-lg p-3 text-sm text-[#E8DFD0] focus:outline-none focus:border-[#C9A96E]"
                 >
-                  <option value="Soft-touch lamination">Luxury Soft-touch Lamination (Velvet feel)</option>
-                  <option value="Spot UV detailing">Premium Matte + Spot UV Gloss Details</option>
-                  <option value="Gold foil stamping">Gold / Silver Foil Stamped Accents</option>
-                  <option value="Standard Silk">Standard Silk Matte (Classic)</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="Soft-touch lamination">Luxury Soft-touch Lamination (Velvet feel)</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="Spot UV detailing">Premium Matte + Spot UV Gloss Details</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="Gold foil stamping">Gold / Silver Foil Stamped Accents</option>
+                  <option className="bg-[#080806] text-[#E8DFD0]" value="Standard Silk">Standard Silk Matte (Classic)</option>
                 </select>
               </div>
             </div>

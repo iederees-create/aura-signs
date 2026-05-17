@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import CtaBanner from '../components/CtaBanner';
 import Footer from '../components/Footer';
-import ConfigModal from '../components/ConfigModal';
 import { useQuote } from '../context/QuoteContext';
 
 export default function Services() {
   const [activeTab, setActiveTab] = useState('events');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const { addToBasket } = useQuote();
+  const { openConfigModal } = useQuote();
 
   useEffect(() => {
     // Intersection Observer for reveal animations
@@ -29,8 +26,7 @@ export default function Services() {
   }, [activeTab]);
 
   const handleConfigure = (name, type) => {
-    setSelectedProduct({ name, type });
-    setIsModalOpen(true);
+    openConfigModal({ name, type });
   };
 
   return (
@@ -140,14 +136,6 @@ export default function Services() {
 
       <CtaBanner />
       <Footer />
-
-      {/* Product Configuration Modal */}
-      <ConfigModal 
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        product={selectedProduct}
-        onConfirm={addToBasket}
-      />
     </div>
   );
 }

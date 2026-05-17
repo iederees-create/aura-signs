@@ -113,3 +113,11 @@
   animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Dropdown Select Option styling for dark-theme contrast */
+select option {
+  background-color: #080806 !important;
+  color: #E8DFD0 !important;
+  font-size: 14px;
+}
+
+

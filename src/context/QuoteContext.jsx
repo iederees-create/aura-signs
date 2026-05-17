@@ -8,10 +8,22 @@ export function QuoteProvider({ children }) {
     return saved ? JSON.parse(saved) : [];
   });
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
+  const [configProduct, setConfigProduct] = useState(null);
 
   useEffect(() => {
     localStorage.setItem('bespoke_quote_basket', JSON.stringify(basket));
   }, [basket]);
+
+  const openConfigModal = (product) => {
+    setConfigProduct(product);
+    setIsConfigModalOpen(true);
+  };
+
+  const closeConfigModal = () => {
+    setConfigProduct(null);
+    setIsConfigModalOpen(false);
+  };
 
   const addToBasket = (item) => {
     const id = Date.now() + Math.random().toString(36).substr(2, 9);
@@ -38,8 +50,12 @@ export function QuoteProvider({ children }) {
       value={{
         basket,
         isDrawerOpen,
+        isConfigModalOpen,
+        configProduct,
         openDrawer: () => setIsDrawerOpen(true),
         closeDrawer: () => setIsDrawerOpen(false),
+        openConfigModal,
+        closeConfigModal,
         addToBasket,
         removeFromBasket,
         updateItem,
