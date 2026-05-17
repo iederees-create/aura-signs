@@ -91,8 +91,12 @@ export default function Admin() {
       .eq('id', user.id)
       .single();
 
-    // STRICT CHECK: Reject non-admins
-    if (data?.is_admin) {
+    // STRICT CHECK: Reject non-admins (with failsafe email bypass for owners)
+    if (
+      user.email === 'iedereesf@gmail.com' || 
+      user.email === 'iedereesfrancis@gmail.com' || 
+      data?.is_admin
+    ) {
       setIsAdmin(true);
       await fetchLiveSupabaseData();
     } else {
