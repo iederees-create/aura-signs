@@ -226,6 +226,113 @@ export default function Admin() {
     }
   }, [isSimulating, simulationStep]);
 
+  const [seeding, setSeeding] = useState(false);
+  const [seedSuccess, setSeedSuccess] = useState(false);
+
+  async function seedRealDatabaseData() {
+    setSeeding(true);
+    setSeedSuccess(false);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // 1. Ensure a profile row exists for the current user in profiles table
+      const { data: currentProfile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('id', user.id)
+        .maybeSingle();
+      
+      const profileId = currentProfile?.id || user.id;
+
+      // 2. Insert high-quality real quote requests
+      const { error: quoteErr } = await supabase
+        .from('quotes')
+        .insert([
+          {
+            client_name: "Sarah Jenkins",
+            client_email: "sarah.j@outlook.com",
+            event_details: "Wedding at Constantia Uitsig, looking for mirror gold welcomes",
+            items: [{ name: "Mirror Gold Welcome Sign", price: 2450 }],
+            status: "pending"
+          },
+          {
+            client_name: "David Miller",
+            client_email: "david.m@gmail.com",
+            event_details: "Corporate gala menu boards",
+            items: [{ name: "Acrylic Table Menus", price: 1200 }],
+            status: "pending"
+          },
+          {
+            client_name: "Emma Watson",
+            client_email: "emma.w@yahoo.com",
+            event_details: "Seating chart on timber stand",
+            items: [{ name: "Frosted Acrylic Seating Chart", price: 3200 }],
+            status: "reviewed"
+          }
+        ]);
+
+      // 3. Insert active client projects (one assigned directly to current logged-in user so it shows in their Vault!)
+      const { error: projectErr } = await supabase
+        .from('projects')
+        .insert([
+          {
+            id: "PRJ-2026-01",
+            profile_id: profileId,
+            title: "The Venter Wedding Signage",
+            status: "design",
+            package_name: "Luxury Gold Package",
+            event_date: "2026-10-18",
+            venue: "Belair Pavilion"
+          },
+          {
+            id: "PRJ-2026-02",
+            profile_id: profileId,
+            title: "Café Lumière Branding",
+            status: "fabrication",
+            package_name: "Classic White Acrylic",
+            event_date: "2026-11-05",
+            venue: "Constantia Uitsig"
+          },
+          {
+            id: "PRJ-2026-03",
+            profile_id: profileId,
+            title: "Corporate Seating Chart",
+            status: "ready",
+            package_name: "Frosted Premium Layout",
+            event_date: "2026-12-12",
+            venue: "The Greenhouse"
+          }
+        ]);
+
+      // 4. Insert design proofs associated with projects
+      const { error: proofErr } = await supabase
+        .from('proofs')
+        .insert([
+          {
+            project_id: "PRJ-2026-01",
+            name: "Welcome Sign Design Proof V1",
+            url: "https://picsum.photos/seed/proof1/800/1000",
+            status: "pending"
+          },
+          {
+            project_id: "PRJ-2026-01",
+            name: "Table Seating Chart Proof V2",
+            url: "https://picsum.photos/seed/proof2/800/1000",
+            status: "approved"
+          }
+        ]);
+
+      setSeedSuccess(true);
+      await fetchLiveSupabaseData(); // Re-fetch live data to update dashboard instantly!
+      setTimeout(() => setSeedSuccess(false), 5000);
+    } catch (err) {
+      console.error("Database seeding error:", err);
+    } finally {
+      setSeeding(false);
+    }
+  }
+
   const startSimulation = () => {
     if (isSimulating) return;
     setIsSimulating(true);
@@ -329,9 +436,23 @@ export default function Admin() {
               Bold & Bespoke Operational Command
             </p>
           </div>
-          <button className="btn-primary bg-[#080806] text-[#FAF8F5] px-6 py-2 text-[10px] tracking-widest border border-transparent hover:bg-transparent hover:text-[#080806] hover:border-[#080806] transition-colors rounded-none">
-            NEW PROJECT
-          </button>
+          <div className="flex gap-4 items-center">
+            {seedSuccess && (
+              <span className="text-[10px] text-[#7A8C6E] font-bold uppercase tracking-widest bg-[#7A8C6E]/10 px-3 py-2 border border-[#7A8C6E]/20">
+                ✓ Seeding Successful
+              </span>
+            )}
+            <button 
+              onClick={seedRealDatabaseData}
+              disabled={seeding}
+              className="bg-transparent border border-[#080806] text-[#080806] hover:bg-[#080806] hover:text-white px-6 py-2 text-[10px] tracking-widest font-extrabold uppercase transition-all rounded-none disabled:opacity-50"
+            >
+              {seeding ? "SEEDING REAL DATA..." : "SEED REAL DATA"}
+            </button>
+            <button className="btn-primary bg-[#080806] text-[#FAF8F5] px-6 py-2 text-[10px] tracking-widest border border-transparent hover:bg-transparent hover:text-[#080806] hover:border-[#080806] transition-colors rounded-none">
+              NEW PROJECT
+            </button>
+          </div>
         </header>
 
         {/* OVERVIEW TAB */}
