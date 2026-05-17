@@ -162,7 +162,7 @@ html { scroll-behavior: smooth; }
   font-weight: 600;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--champagon-dark);
+  color: var(--champagon-dark) !important;
   margin-bottom: 1.5rem;
   opacity: 0;
   animation: fadeUp 0.8s 0.2s forwards;
@@ -174,14 +174,14 @@ html { scroll-behavior: smooth; }
   font-weight: 300;
   line-height: 1.05;
   letter-spacing: -0.01em;
-  color: var(--charcoal);
+  color: var(--charcoal) !important;
   margin-bottom: 1.8rem;
   opacity: 0;
   animation: fadeUp 0.9s 0.35s forwards;
 }
 .hero-headline em {
   font-style: italic;
-  color: var(--champagon-dark);
+  color: var(--champagon-dark) !important;
   font-weight: 300;
   text-shadow: 0 0 1px rgba(139, 115, 69, 0.1);
 }
@@ -189,8 +189,8 @@ html { scroll-behavior: smooth; }
 .hero-sub {
   font-family: var(--sans);
   font-size: 15px;
-  font-weight: 300;
-  color: var(--warm-gray);
+  font-weight: 400;
+  color: var(--warm-gray) !important;
   max-width: 380px;
   line-height: 1.8;
   margin-bottom: 3rem;
@@ -359,7 +359,7 @@ html { scroll-behavior: smooth; }
   font-size: clamp(36px, 4vw, 60px);
   font-weight: 300;
   line-height: 1.1;
-  color: var(--charcoal);
+  color: var(--charcoal) !important;
   margin-bottom: 1.5rem;
 }
 .section-headline em { font-style: italic; color: var(--champagon-dark); }
@@ -367,7 +367,7 @@ html { scroll-behavior: smooth; }
   font-family: var(--sans);
   font-size: 15px;
   font-weight: 300;
-  color: var(--warm-gray);
+  color: var(--warm-gray) !important;
   max-width: 520px;
   line-height: 1.9;
 }
