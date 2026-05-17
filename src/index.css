@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-[#080806] text-[#E8DFD0] antialiased;
+    @apply antialiased;
     font-family: 'DM Sans', sans-serif;
   }
   
