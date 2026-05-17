@@ -68,11 +68,11 @@ export default function Vault() {
     setTimeout(() => {
       setShowQuoteForm(false);
       const whatsappMsg = encodeURIComponent(`Hi Bold & Bespoke! I have submitted a quote request from my Vault for my wedding on ${e.target.weddingDate.value} at ${e.target.venue.value}.`);
-      window.open(`https://wa.me/27123456789?text=${whatsappMsg}`, '_blank');
+      window.open(`https://wa.me/27662720491?text=${whatsappMsg}`, '_blank');
     }, 2000);
   };
 
-  if (!user) return <div className="min-h-screen bg-[#080806]" />;
+  if (!user) return <div className="min-h-screen bg-[#FAF8F5]" />;
 
   const renderTimeline = () => {
     const stages = [
@@ -88,16 +88,16 @@ export default function Vault() {
 
     return (
       <div className="relative flex justify-between mb-20 mt-12 px-4">
-        <div className="absolute top-1/2 left-0 w-full h-[1px] bg-[#E8DFD0]/10 -translate-y-1/2 z-0" />
-        <div className="absolute top-1/2 left-0 h-[1px] bg-[#E8DFD0] -translate-y-1/2 z-0 transition-all duration-1000" style={{ width: `${(currentIndex / (stages.length - 1)) * 100}%` }} />
+        <div className="absolute top-1/2 left-0 w-full h-[1px] bg-[#080806]/10 -translate-y-1/2 z-0" />
+        <div className="absolute top-1/2 left-0 h-[1px] bg-[#080806] -translate-y-1/2 z-0 transition-all duration-1000" style={{ width: `${(currentIndex / (stages.length - 1)) * 100}%` }} />
         
         {stages.map((stage, index) => {
           const isCompleted = index <= currentIndex;
           const isActive = index === currentIndex;
           return (
             <div key={stage.id} className="relative z-10 flex flex-col items-center">
-              <div className={`w-3 h-3 rounded-full border mb-4 transition-all duration-500 ${isCompleted ? 'bg-[#E8DFD0] border-[#E8DFD0] scale-125' : 'bg-[#080806] border-[#E8DFD0]/20'} ${isActive ? 'ring-4 ring-[#E8DFD0]/10' : ''}`} />
-              <span className={`text-[10px] uppercase tracking-[0.2em] font-medium text-center max-w-[80px] leading-relaxed ${isCompleted ? 'text-[#E8DFD0]' : 'text-[#E8DFD0]/30'}`}>
+              <div className={`w-3 h-3 rounded-full border mb-4 transition-all duration-500 ${isCompleted ? 'bg-[#080806] border-[#080806] scale-125' : 'bg-white border-[#080806]/20'} ${isActive ? 'ring-4 ring-[#080806]/10' : ''}`} />
+              <span className={`text-[10px] uppercase tracking-[0.2em] font-bold text-center max-w-[80px] leading-relaxed ${isCompleted ? 'text-[#080806]' : 'text-[#080806]/30'}`}>
                 {stage.label}
               </span>
             </div>
@@ -108,31 +108,31 @@ export default function Vault() {
   };
 
   return (
-    <div className="h-screen bg-[#080806] flex text-[#E8DFD0] pt-[72px] overflow-hidden">
-      {/* Sidebar */}
-      <div className="w-80 border-r border-[#E8DFD0]/5 p-12 flex flex-col hidden lg:flex">
-        <Link to="/" className="font-serif font-light tracking-[0.2em] text-[#E8DFD0] text-3xl mb-20">
+    <div className="h-screen bg-[#FAF8F5] flex text-[#080806] pt-[72px] overflow-hidden">
+      {/* Sidebar - Linen & Charcoal Premium Light Theme */}
+      <div className="w-80 border-r border-[#080806]/10 p-12 flex flex-col hidden lg:flex bg-[#F4F0EA]">
+        <Link to="/" className="font-serif font-light tracking-[0.2em] text-[#080806] text-3xl mb-20">
           BOLD & BESPOKE
         </Link>
         <div className="space-y-8 flex-1">
-          <button onClick={() => setActiveTab("vault")} className={`flex items-center gap-4 text-xs uppercase tracking-[0.2em] transition-colors ${activeTab === 'vault' ? 'text-[#E8DFD0]' : 'text-[#E8DFD0]/40 hover:text-[#E8DFD0]'}`}>
+          <button onClick={() => setActiveTab("vault")} className={`flex items-center gap-4 text-xs uppercase tracking-[0.2em] transition-colors font-bold ${activeTab === 'vault' ? 'text-[#C9603A]' : 'text-[#080806]/55 hover:text-[#080806]'}`}>
             <LayoutDashboard size={18} strokeWidth={1.5} />
             The Vault
           </button>
-          <button onClick={() => setActiveTab("projects")} className={`flex items-center gap-4 text-xs uppercase tracking-[0.2em] transition-colors ${activeTab === 'projects' ? 'text-[#E8DFD0]' : 'text-[#E8DFD0]/40 hover:text-[#E8DFD0]'}`}>
+          <button onClick={() => setActiveTab("projects")} className={`flex items-center gap-4 text-xs uppercase tracking-[0.2em] transition-colors font-bold ${activeTab === 'projects' ? 'text-[#C9603A]' : 'text-[#080806]/55 hover:text-[#080806]'}`}>
             <FolderKanban size={18} strokeWidth={1.5} />
             My Projects
           </button>
-          <button className="flex items-center gap-4 text-xs uppercase tracking-[0.2em] text-[#E8DFD0]/40 hover:text-[#E8DFD0] transition-colors">
+          <button className="flex items-center gap-4 text-xs uppercase tracking-[0.2em] text-[#080806]/40 hover:text-[#080806] transition-colors font-bold">
             <Heart size={18} strokeWidth={1.5} />
             Saved Items
           </button>
-          <button className="flex items-center gap-4 text-xs uppercase tracking-[0.2em] text-[#E8DFD0]/40 hover:text-[#E8DFD0] transition-colors">
+          <button className="flex items-center gap-4 text-xs uppercase tracking-[0.2em] text-[#080806]/40 hover:text-[#080806] transition-colors font-bold">
             <Settings size={18} strokeWidth={1.5} />
             Account
           </button>
         </div>
-        <button onClick={handleLogout} className="flex items-center gap-4 text-xs uppercase tracking-[0.2em] text-[#E8DFD0]/40 hover:text-[#E8DFD0] transition-colors pt-8 border-t border-[#E8DFD0]/5">
+        <button onClick={handleLogout} className="flex items-center gap-4 text-xs uppercase tracking-[0.2em] text-[#080806]/40 hover:text-[#C9603A] transition-colors pt-8 border-t border-[#080806]/10">
           <LogOut size={18} strokeWidth={1.5} />
           Sign Out
         </button>
@@ -141,22 +141,22 @@ export default function Vault() {
       {/* Proof Lightbox */}
       {selectedProof && (
         <div className="fixed inset-0 z-[3000] flex items-center justify-center p-6">
-          <div className="absolute inset-0 bg-[#080806]/95 backdrop-blur-md" onClick={() => setSelectedProof(null)} />
-          <div className="max-w-4xl w-full grid md:grid-cols-2 gap-12 relative z-10 p-8 glass-panel border-[#E8DFD0]/10">
-            <div className="aspect-[4/5] bg-black overflow-hidden border border-[#E8DFD0]/10">
+          <div className="absolute inset-0 bg-[#080806]/60 backdrop-blur-md" onClick={() => setSelectedProof(null)} />
+          <div className="max-w-4xl w-full grid md:grid-cols-2 gap-12 relative z-10 p-10 bg-[#FAF8F5] border border-[#080806]/15 shadow-2xl">
+            <div className="aspect-[4/5] bg-white overflow-hidden border border-[#080806]/10">
               <img src={selectedProof.url} alt={selectedProof.name} className="w-full h-full object-contain" />
             </div>
             <div className="flex flex-col justify-center">
-              <h3 className="text-3xl font-display font-semibold mb-6">{selectedProof.name}</h3>
+              <h3 className="text-3xl font-serif font-light mb-6 text-[#080806]">{selectedProof.name}</h3>
               
               <div className="space-y-6 mb-10">
                 <div className="space-y-3">
-                  <label className="text-xs uppercase tracking-widest text-[#E8DFD0]/50">Any feedback or change requests?</label>
+                  <label className="text-xs uppercase tracking-widest text-[#080806]/60 font-bold">Any feedback or change requests?</label>
                   <textarea 
                     value={feedback}
                     onChange={(e) => setFeedback(e.target.value)}
                     placeholder="Leave blank if you are happy to proceed..."
-                    className="w-full bg-[#080806] border border-[#E8DFD0]/10 p-4 text-sm focus:border-[#E8DFD0]/40 outline-none h-32"
+                    className="w-full bg-white border border-[#080806]/10 p-4 text-sm focus:border-[#080806]/40 outline-none h-32 text-[#080806]"
                   />
                 </div>
                 <label className="flex items-center gap-3 cursor-pointer group">
@@ -166,10 +166,10 @@ export default function Vault() {
                     onChange={(e) => setNoChangesChecked(e.target.checked)}
                     className="hidden"
                   />
-                  <div className={`w-5 h-5 border border-[#E8DFD0]/20 flex items-center justify-center transition-colors ${noChangesChecked ? 'bg-[#E8DFD0]' : ''}`}>
-                    <ArrowRight size={14} className="text-[#080806]" />
+                  <div className={`w-5 h-5 border border-[#080806]/20 flex items-center justify-center transition-colors ${noChangesChecked ? 'bg-[#080806]' : 'bg-white'}`}>
+                    <ArrowRight size={14} className={noChangesChecked ? 'text-[#FAF8F5]' : 'text-transparent'} />
                   </div>
-                  <span className="text-sm text-[#E8DFD0]/60 group-hover:text-[#E8DFD0] transition-colors">I have reviewed the design and no changes are needed.</span>
+                  <span className="text-sm text-[#080806]/60 group-hover:text-[#080806] transition-colors">I have reviewed the design and no changes are needed.</span>
                 </label>
               </div>
 
@@ -177,11 +177,11 @@ export default function Vault() {
                 <button 
                   disabled={!noChangesChecked && feedback.length === 0}
                   onClick={() => handleProofAction(selectedProof.id, feedback.length > 0 ? 'revise' : 'approve')}
-                  className="btn-primary py-4 disabled:opacity-30 disabled:cursor-not-allowed"
+                  className="btn-primary bg-[#080806] text-white py-4 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-transparent hover:text-[#080806] border border-transparent hover:border-[#080806] transition-all font-bold"
                 >
                   {feedback.length > 0 ? 'Request Revisions' : 'Approve This Design'}
                 </button>
-                <button onClick={() => setSelectedProof(null)} className="text-[#E8DFD0]/40 uppercase tracking-widest text-[10px] hover:text-[#E8DFD0] transition-colors py-2">Back to Dashboard</button>
+                <button onClick={() => setSelectedProof(null)} className="text-[#080806]/40 uppercase tracking-widest text-[10px] hover:text-[#080806] transition-colors py-2 font-bold">Back to Dashboard</button>
               </div>
             </div>
           </div>
@@ -191,25 +191,25 @@ export default function Vault() {
       {/* Quote Form Modal */}
       {showQuoteForm && (
         <div className="fixed inset-0 z-[2000] flex items-center justify-center p-6">
-          <div className="absolute inset-0 bg-[#080806]/90 backdrop-blur-xl" onClick={() => setShowQuoteForm(false)} />
-          <form onSubmit={handleQuoteSubmit} className="glass-panel max-w-xl w-full p-12 relative z-10 border-[#E8DFD0]/20">
-            <h2 className="text-4xl font-display font-semibold mb-2">Request a Quote</h2>
-            <p className="text-[#E8DFD0]/60 font-light mb-10 text-sm italic">Share your vision with us before we connect on WhatsApp.</p>
+          <div className="absolute inset-0 bg-[#080806]/40 backdrop-blur-md" onClick={() => setShowQuoteForm(false)} />
+          <form onSubmit={handleQuoteSubmit} className="bg-[#FAF8F5] border border-[#080806]/15 max-w-xl w-full p-12 relative z-10 shadow-2xl">
+            <h2 className="text-4xl font-serif font-light mb-2 text-[#080806]">Request a Quote</h2>
+            <p className="text-[#080806]/60 font-light mb-10 text-sm italic">Share your vision with us before we connect on WhatsApp.</p>
             
             <div className="space-y-6 mb-12">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] uppercase tracking-widest text-[#E8DFD0]/50">Wedding Date</label>
-                  <input name="weddingDate" type="date" required className="w-full bg-[#080806]/50 border border-[#E8DFD0]/10 p-3 text-sm focus:border-[#E8DFD0]/40 outline-none" />
+                  <label className="text-[10px] uppercase tracking-widest text-[#080806]/60 font-bold">Wedding Date</label>
+                  <input name="weddingDate" type="date" required className="w-full bg-white border border-[#080806]/10 p-3 text-sm focus:border-[#080806]/40 outline-none text-[#080806]" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] uppercase tracking-widest text-[#E8DFD0]/50">Venue Name</label>
-                  <input name="venue" type="text" required placeholder="e.g. Boschendal" className="w-full bg-[#080806]/50 border border-[#E8DFD0]/10 p-3 text-sm focus:border-[#E8DFD0]/40 outline-none" />
+                  <label className="text-[10px] uppercase tracking-widest text-[#080806]/60 font-bold">Venue Name</label>
+                  <input name="venue" type="text" required placeholder="e.g. Boschendal" className="w-full bg-white border border-[#080806]/10 p-3 text-sm focus:border-[#080806]/40 outline-none text-[#080806]" />
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-widest text-[#E8DFD0]/50">Package Interest</label>
-                <select name="package" className="w-full bg-[#080806]/50 border border-[#E8DFD0]/10 p-3 text-sm focus:border-[#E8DFD0]/40 outline-none appearance-none">
+                <label className="text-[10px] uppercase tracking-widest text-[#080806]/60 font-bold">Package Interest</label>
+                <select name="package" className="w-full bg-white border border-[#080806]/10 p-3 text-sm focus:border-[#080806]/40 outline-none text-[#080806]">
                   <option value="essentials">Essentials Package</option>
                   <option value="standard">Standard Package</option>
                   <option value="premium">Premium Package</option>
@@ -217,12 +217,12 @@ export default function Vault() {
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="text-[10px] uppercase tracking-widest text-[#E8DFD0]/50">Estimated Budget (Optional)</label>
-                <input name="budget" type="text" placeholder="e.g. R5,000 - R8,000" className="w-full bg-[#080806]/50 border border-[#E8DFD0]/10 p-3 text-sm focus:border-[#E8DFD0]/40 outline-none" />
+                <label className="text-[10px] uppercase tracking-widest text-[#080806]/60 font-bold">Estimated Budget (Optional)</label>
+                <input name="budget" type="text" placeholder="e.g. R5,000 - R8,000" className="w-full bg-white border border-[#080806]/10 p-3 text-sm focus:border-[#080806]/40 outline-none text-[#080806]" />
               </div>
             </div>
 
-            <button disabled={quoteSubmitted} className="w-full btn-primary py-5 flex items-center justify-center gap-3">
+            <button disabled={quoteSubmitted} className="w-full btn-primary bg-[#080806] text-white hover:bg-transparent hover:text-[#080806] border border-transparent hover:border-[#080806] transition-all py-5 flex items-center justify-center gap-3 font-bold">
               {quoteSubmitted ? <Loader2 className="animate-spin" size={20} /> : "Submit Brief & Start Chat"}
             </button>
           </form>
@@ -233,16 +233,16 @@ export default function Vault() {
       <div className="flex-1 p-12 lg:p-24 overflow-y-auto">
         <header className="mb-24 flex justify-between items-start">
           <div>
-            <h1 className="text-5xl font-serif font-light mb-4">
+            <h1 className="text-5xl font-serif font-light mb-4 text-[#080806]">
               {activeTab === 'vault' ? 'Project Vault' : 'Your Signage Project'}
             </h1>
-            <p className="text-[#E8DFD0]/70 font-light text-lg italic">
+            <p className="text-[#080806]/70 font-light text-lg italic">
               {activeTab === 'vault' ? 'Exclusive resources for your Cape Town projects.' : `Order ${mockProject.id} · ${mockProject.package}`}
             </p>
           </div>
           <div className="flex gap-4">
             {activeTab === 'vault' && (
-              <button onClick={() => setShowQuoteForm(true)} className="btn-primary px-8 py-3 text-xs">Request New Quote</button>
+              <button onClick={() => setShowQuoteForm(true)} className="btn-primary bg-[#080806] text-white hover:bg-transparent hover:text-[#080806] border border-transparent hover:border-[#080806] transition-all px-8 py-3 text-xs font-bold rounded-none">Request New Quote</button>
             )}
           </div>
         </header>
@@ -250,61 +250,61 @@ export default function Vault() {
         {activeTab === 'vault' ? (
           <div className="grid lg:grid-cols-2 gap-12 max-w-6xl">
             {/* Checklist Card */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-panel p-12 group relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-40 h-40 bg-[#E8DFD0]/5 rounded-bl-full group-hover:scale-110 transition-transform duration-700" />
-              <FileText size={32} className="text-[#E8DFD0] mb-8" strokeWidth={1.5} />
-              <h3 className="text-3xl font-serif font-light mb-4">The Master Checklist</h3>
-              <p className="text-[#E8DFD0]/50 font-light mb-12 leading-relaxed">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-[#080806]/10 p-12 group relative overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
+              <div className="absolute top-0 right-0 w-40 h-40 bg-[#080806]/5 rounded-bl-full group-hover:scale-110 transition-transform duration-700" />
+              <FileText size={32} className="text-[#080806] mb-8" strokeWidth={1.5} />
+              <h3 className="text-3xl font-serif font-light mb-4 text-[#080806]">The Master Checklist</h3>
+              <p className="text-[#080806]/50 font-light mb-12 leading-relaxed">
                 Our definitive guide to every sign you need, from welcome boards to bar menus and seating charts.
               </p>
-              <button className="btn-outline w-full py-5 flex items-center justify-between group-hover:bg-[#E8DFD0] group-hover:text-[#080806]">
+              <button className="btn-outline w-full py-5 flex items-center justify-between border border-[#080806] text-[#080806] hover:bg-[#080806] hover:text-white font-bold transition-all">
                 Download PDF Guide
                 <Download size={18} />
               </button>
             </motion.div>
 
             {/* Referrals Card */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="border border-[#E8DFD0]/10 p-12 flex flex-col justify-center">
-              <h3 className="text-2xl font-display font-semibold mb-2">Refer a Friend</h3>
-              <p className="text-[#E8DFD0]/40 text-sm font-light mb-8 italic">Share the Aura experience and they get 10% off.</p>
-              <div className="bg-[#080806] border border-[#E8DFD0]/10 p-4 text-[10px] uppercase tracking-widest text-center mb-6 text-[#E8DFD0]/60">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white border border-[#080806]/10 p-12 flex flex-col justify-center shadow-sm hover:shadow-md transition-all duration-300">
+              <h3 className="text-2xl font-serif font-light mb-2 text-[#080806]">Refer a Friend</h3>
+              <p className="text-[#080806]/40 text-sm font-light mb-8 italic">Share the Aura experience and they get 10% off.</p>
+              <div className="bg-[#FAF8F5] border border-[#080806]/10 p-4 text-[10px] uppercase tracking-widest text-center mb-6 text-[#080806]/60 font-bold">
                 BOLDANDBESPOKE.CO.ZA/REF/JANE-D
               </div>
-              <button className="text-xs uppercase tracking-widest text-[#E8DFD0] border-b border-[#E8DFD0] pb-2 self-start hover:text-[#C9603A] hover:border-[#C9603A] transition-colors">Copy Link</button>
+              <button className="text-xs uppercase tracking-widest text-[#080806] border-b border-[#080806] pb-2 self-start hover:text-[#C9603A] hover:border-[#C9603A] transition-colors font-bold">Copy Link</button>
             </motion.div>
           </div>
         ) : (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-6xl">
-            <div className="bg-[#080806] border border-[#E8DFD0]/5 p-12 mb-16">
+            <div className="bg-white border border-[#080806]/10 p-12 mb-16 shadow-sm">
               <div className="flex justify-between items-center mb-12">
-                <span className="text-[10px] uppercase tracking-[0.3em] text-[#E8DFD0]/40">Production Timeline</span>
-                <span className="text-xs italic text-[#C9A96E]">Wedding Date: {mockProject.date}</span>
+                <span className="text-[10px] uppercase tracking-[0.3em] text-[#080806]/40 font-bold">Production Timeline</span>
+                <span className="text-xs italic text-[#C9603A] font-semibold">Wedding Date: {mockProject.date}</span>
               </div>
               {renderTimeline()}
             </div>
             
             <div className="mt-20">
-              <h3 className="text-3xl font-display font-semibold mb-12">Design Proofs</h3>
+              <h3 className="text-3xl font-serif font-light mb-12 text-[#080806]">Design Proofs</h3>
               <div className="grid md:grid-cols-2 gap-12">
                 {proofs.map((proof) => (
                   <div key={proof.id} className="group">
-                    <div className="aspect-[4/5] bg-black mb-8 overflow-hidden relative border border-[#E8DFD0]/5">
-                      <img src={proof.url} alt={proof.name} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-700" />
-                      <div className="absolute top-6 right-6 bg-[#080806]/80 backdrop-blur-md px-4 py-2 text-[10px] uppercase tracking-widest border border-[#E8DFD0]/20">
+                    <div className="aspect-[4/5] bg-white mb-8 overflow-hidden relative border border-[#080806]/10 shadow-sm">
+                      <img src={proof.url} alt={proof.name} className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-all duration-700" />
+                      <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-md px-4 py-2 text-[10px] uppercase tracking-widest border border-[#080806]/20 text-[#080806] font-bold">
                         {proof.status === 'approved' ? 'Approved' : 'Awaiting Review'}
                       </div>
                       {proof.status !== 'approved' && (
                         <button 
                           onClick={() => setSelectedProof(proof)}
-                          className="absolute inset-0 flex items-center justify-center bg-[#080806]/0 group-hover:bg-[#080806]/40 transition-colors duration-500"
+                          className="absolute inset-0 flex items-center justify-center bg-[#FAF8F5]/0 group-hover:bg-[#FAF8F5]/30 transition-colors duration-500"
                         >
-                          <span className="bg-[#E8DFD0] text-[#080806] px-8 py-4 text-xs uppercase tracking-widest font-bold opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500">Review Design</span>
+                          <span className="bg-[#080806] text-white px-8 py-4 text-xs uppercase tracking-widest font-bold opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 border border-transparent hover:bg-transparent hover:text-[#080806] hover:border-[#080806]">Review Design</span>
                         </button>
                       )}
                     </div>
                     <div className="flex justify-between items-center">
-                      <h4 className="text-xl font-display italic">{proof.name}</h4>
-                      {proof.status === 'approved' && <span className="text-[#7A8C6E] text-[10px] uppercase tracking-widest flex items-center gap-2 font-bold"><div className="w-1.5 h-1.5 bg-[#7A8C6E] rounded-full" /> Approved</span>}
+                      <h4 className="text-xl font-serif italic text-[#080806]">{proof.name}</h4>
+                      {proof.status === 'approved' && <span className="text-[#7A8C6E] text-[10px] uppercase tracking-widest flex items-center gap-2 font-bold"><div className="w-1.5 h-1.5 bg-[#7A8C6E] rounded-full animate-pulse" /> Approved</span>}
                     </div>
                   </div>
                 ))}
