@@ -49,14 +49,40 @@ export default function Navbar() {
   
   // Auth state listener
   const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
+    async function loadUserProfile(sessionUser) {
+      if (!sessionUser) {
+        setUser(null);
+        setIsAdmin(false);
+        return;
+      }
+      setUser(sessionUser);
+      
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('is_admin')
+          .eq('id', sessionUser.id)
+          .single();
+        
+        if (data?.is_admin) {
+          setIsAdmin(true);
+        } else {
+          setIsAdmin(false);
+        }
+      } catch (err) {
+        setIsAdmin(false);
+      }
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
+      loadUserProfile(session?.user ?? null);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      loadUserProfile(session?.user ?? null);
     });
 
     return () => subscription.unsubscribe();
@@ -96,7 +122,7 @@ export default function Navbar() {
           <li><Link to="/about" className={location.pathname === '/about' ? 'active' : ''} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>{t('nav.about')}</Link></li>
           <li><Link to="/vault" className={location.pathname === '/vault' ? 'active' : ''} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>{t('nav.myProjects')}</Link></li>
           
-          {user && (
+          {isAdmin && (
             <li>
               <Link 
                 to="/admin" 
@@ -175,7 +201,7 @@ export default function Navbar() {
         <Link to="/about" onClick={handleNavClick}>{t('nav.about')}</Link>
         <Link to="/vault" onClick={handleNavClick}>{t('nav.myProjects')}</Link>
         
-        {user && (
+        {isAdmin && (
           <Link 
             to="/admin" 
             onClick={handleNavClick}
