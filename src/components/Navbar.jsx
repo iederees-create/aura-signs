@@ -182,7 +182,21 @@ export default function Navbar() {
             </button>
           </li>
           
-          <li><Link to="/auth?signup=true" className="nav-cta">{t('nav.getQuote')}</Link></li>
+          {user ? (
+            <li>
+              <button 
+                onClick={async () => {
+                  await supabase.auth.signOut();
+                  window.location.reload();
+                }}
+                className="nav-cta border border-[#C9A96E]/40 text-[#C9A96E] hover:bg-[#C9A96E] hover:text-[#080806] transition-all px-4 py-2 text-xs uppercase tracking-widest font-bold bg-transparent"
+              >
+                Sign Out
+              </button>
+            </li>
+          ) : (
+            <li><Link to="/auth?signup=true" className="nav-cta">{t('nav.getQuote')}</Link></li>
+          )}
         </ul>
         <button 
           className="nav-hamburger" 
@@ -219,7 +233,21 @@ export default function Navbar() {
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
           {t('nav.basket')} ({basket.length})
         </button>
-        <Link to="/auth?signup=true" onClick={() => setIsMobileMenuOpen(false)}>{t('nav.getQuote')}</Link>
+        
+        {user ? (
+          <button 
+            onClick={async () => {
+              setIsMobileMenuOpen(false);
+              await supabase.auth.signOut();
+              window.location.reload();
+            }}
+            className="w-full bg-[#C9603A] text-white py-4 text-xs uppercase tracking-widest font-bold mt-4 border border-[#C9603A] hover:bg-transparent hover:text-[#C9603A] transition-all text-center"
+          >
+            Sign Out
+          </button>
+        ) : (
+          <Link to="/auth?signup=true" onClick={() => setIsMobileMenuOpen(false)}>{t('nav.getQuote')}</Link>
+        )}
         
         {/* Mobile Language Switcher */}
         <div className="flex flex-wrap gap-2 justify-center items-center py-4 border-t border-[#E8DFD0]/10 mt-4 px-4">
