@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useQuote } from '../context/QuoteContext';
 import { useLanguage } from '../context/LanguageContext';
+import { supabase } from '../lib/supabase';
+import { Brain } from 'lucide-react';
 import '../pages/landing-page.css';
 
 const popularLanguages = [
@@ -44,6 +46,21 @@ export default function Navbar() {
   // Custom language modal triggers
   const [isLangModalOpen, setIsLangModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  
+  // Auth state listener
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -78,6 +95,18 @@ export default function Navbar() {
           <li><Link to="/gallery" className={location.pathname === '/gallery' ? 'active' : ''} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>{t('nav.gallery')}</Link></li>
           <li><Link to="/about" className={location.pathname === '/about' ? 'active' : ''} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>{t('nav.about')}</Link></li>
           <li><Link to="/vault" className={location.pathname === '/vault' ? 'active' : ''} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>{t('nav.myProjects')}</Link></li>
+          
+          {user && (
+            <li>
+              <Link 
+                to="/admin" 
+                className={`flex items-center gap-1.5 px-3 py-1.5 border border-[#C9A96E]/20 text-[10px] text-[#C9A96E] hover:border-[#C9A96E]/50 hover:text-white transition-all rounded-lg tracking-widest font-semibold uppercase ${location.pathname === '/admin' ? 'bg-[#C9A96E]/10 border-[#C9A96E]' : ''}`}
+              >
+                <Brain size={12} className="animate-pulse shrink-0" />
+                Admin
+              </Link>
+            </li>
+          )}
           
           {/* Language Switcher Dropdown */}
           <li className="relative group flex items-center mr-2 text-[#E8DFD0]">
@@ -145,6 +174,17 @@ export default function Navbar() {
         <Link to="/gallery" onClick={handleNavClick}>{t('nav.gallery')}</Link>
         <Link to="/about" onClick={handleNavClick}>{t('nav.about')}</Link>
         <Link to="/vault" onClick={handleNavClick}>{t('nav.myProjects')}</Link>
+        
+        {user && (
+          <Link 
+            to="/admin" 
+            onClick={handleNavClick}
+            className="flex items-center justify-center gap-2 py-3 border border-[#C9A96E]/15 text-[#C9A96E] hover:border-[#C9A96E] transition-all tracking-widest uppercase text-[11px] rounded-lg mt-2 font-semibold"
+          >
+            <Brain size={14} className="animate-pulse shrink-0" />
+            Admin Panel
+          </Link>
+        )}
         
         <button 
           onClick={() => { setIsMobileMenuOpen(false); openDrawer(); }}
