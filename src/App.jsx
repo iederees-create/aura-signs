@@ -4,6 +4,9 @@ import LandingPage from "./pages/LandingPage";
 import Auth from "./pages/Auth";
 import Vault from "./pages/Vault";
 import Admin from "./pages/Admin";
+import Services from "./pages/Services";
+import Gallery from "./pages/Gallery";
+import About from "./pages/About";
 import FloatingWhatsApp from "./components/FloatingWhatsApp";
 import Navbar from "./components/Navbar";
 
@@ -13,6 +16,9 @@ export default function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/about" element={<About />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/vault" element={<Vault />} />
         <Route path="/admin" element={<Admin />} />

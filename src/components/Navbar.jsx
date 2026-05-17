@@ -16,16 +16,9 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavClick = (id) => {
+  const handleNavClick = () => {
     setIsMobileMenuOpen(false);
-    if (location.pathname !== '/') {
-      navigate('/', { state: { scrollTo: id } });
-    } else {
-      const el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -34,10 +27,10 @@ export default function Navbar() {
         <Link to="/" className="nav-logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Bespo<span>k</span>e</Link>
         <ul className="nav-links">
           <li><Link to="/" className={location.pathname === '/' ? 'active' : ''} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Home</Link></li>
-          <li><button onClick={() => handleNavClick('services')} className="nav-link-btn">Services</button></li>
-          <li><button onClick={() => handleNavClick('gallery')} className="nav-link-btn">Gallery</button></li>
-          <li><button onClick={() => handleNavClick('about')} className="nav-link-btn">About</button></li>
-          <li><Link to="/vault">My Projects</Link></li>
+          <li><Link to="/services" className={location.pathname === '/services' ? 'active' : ''} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Services</Link></li>
+          <li><Link to="/gallery" className={location.pathname === '/gallery' ? 'active' : ''} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Gallery</Link></li>
+          <li><Link to="/about" className={location.pathname === '/about' ? 'active' : ''} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>About</Link></li>
+          <li><Link to="/vault" className={location.pathname === '/vault' ? 'active' : ''} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>My Projects</Link></li>
           <li><Link to="/auth?signup=true" className="nav-cta">Get a quote</Link></li>
         </ul>
         <button 
@@ -51,10 +44,10 @@ export default function Navbar() {
 
       <div className={`mobile-nav ${isMobileMenuOpen ? 'open' : ''}`} id="mobile-nav">
         <Link to="/" onClick={() => { setIsMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>Home</Link>
-        <button onClick={() => handleNavClick('services')}>Services</button>
-        <button onClick={() => handleNavClick('gallery')}>Gallery</button>
-        <button onClick={() => handleNavClick('about')}>About</button>
-        <Link to="/vault" onClick={() => setIsMobileMenuOpen(false)}>My Projects</Link>
+        <Link to="/services" onClick={handleNavClick}>Services</Link>
+        <Link to="/gallery" onClick={handleNavClick}>Gallery</Link>
+        <Link to="/about" onClick={handleNavClick}>About</Link>
+        <Link to="/vault" onClick={handleNavClick}>My Projects</Link>
         <Link to="/auth?signup=true" onClick={() => setIsMobileMenuOpen(false)}>Get a quote</Link>
       </div>
     </>
