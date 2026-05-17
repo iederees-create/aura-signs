@@ -53,7 +53,7 @@ export default function Admin() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#080806] flex text-[#E8DFD0]">
+    <div className="h-screen bg-[#080806] flex text-[#E8DFD0] pt-[72px] overflow-hidden">
       {/* Admin Sidebar */}
       <div className="w-72 border-r border-[#E8DFD0]/5 p-10 flex flex-col">
         <div className="flex items-center gap-3 mb-16">

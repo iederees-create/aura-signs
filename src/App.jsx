@@ -5,10 +5,12 @@ import Auth from "./pages/Auth";
 import Vault from "./pages/Vault";
 import Admin from "./pages/Admin";
 import FloatingWhatsApp from "./components/FloatingWhatsApp";
+import Navbar from "./components/Navbar";
 
 export default function App() {
   return (
     <Router>
+      <Navbar />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/auth" element={<Auth />} />

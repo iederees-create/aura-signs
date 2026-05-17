@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './landing-page.css';
 
 export default function LandingPage() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState('events');
 
-  const scrollTo = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      setTimeout(() => {
+        const el = document.getElementById(location.state.scrollTo);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+      window.history.replaceState({}, document.title);
     }
-    setIsMobileMenuOpen(false);
-  };
+  }, [location]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
 
     // Intersection Observer for reveal animations
     const observer = new IntersectionObserver(
@@ -37,41 +36,12 @@ export default function LandingPage() {
     document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
       observer.disconnect();
     };
   }, []);
 
   return (
     <div className="landing-page-wrapper">
-      {/* NAV */}
-      <nav id="main-nav" className={`landing-nav ${isScrolled ? 'scrolled' : ''}`}>
-        <Link to="/" className="nav-logo" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Bespo<span>k</span>e</Link>
-        <ul className="nav-links">
-          <li><Link to="/" className="active" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>Home</Link></li>
-          <li><button onClick={() => scrollTo('services')} className="nav-link-btn">Services</button></li>
-          <li><button onClick={() => scrollTo('gallery')} className="nav-link-btn">Gallery</button></li>
-          <li><button onClick={() => scrollTo('about')} className="nav-link-btn">About</button></li>
-          <li><Link to="/auth">My Projects</Link></li>
-          <li><Link to="/auth?signup=true" className="nav-cta">Get a quote</Link></li>
-        </ul>
-        <button 
-          className="nav-hamburger" 
-          aria-label="Open menu" 
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        >
-          <span></span><span></span><span></span>
-        </button>
-      </nav>
-
-      <div className={`mobile-nav ${isMobileMenuOpen ? 'open' : ''}`} id="mobile-nav">
-        <Link to="/" onClick={() => { setIsMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>Home</Link>
-        <button onClick={() => scrollTo('services')}>Services</button>
-        <button onClick={() => scrollTo('gallery')}>Gallery</button>
-        <button onClick={() => scrollTo('about')}>About</button>
-        <Link to="/auth" onClick={() => setIsMobileMenuOpen(false)}>My Projects</Link>
-        <Link to="/auth?signup=true" onClick={() => setIsMobileMenuOpen(false)}>Get a quote</Link>
-      </div>
 
       {/* HERO */}
       <section className="hero" style={{ padding: 0 }}>

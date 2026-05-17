@@ -108,7 +108,7 @@ export default function Vault() {
   };
 
   return (
-    <div className="min-h-screen bg-[#080806] flex text-[#E8DFD0]">
+    <div className="h-screen bg-[#080806] flex text-[#E8DFD0] pt-[72px] overflow-hidden">
       {/* Sidebar */}
       <div className="w-80 border-r border-[#E8DFD0]/5 p-12 flex flex-col hidden lg:flex">
         <Link to="/" className="font-serif font-light tracking-[0.2em] text-[#E8DFD0] text-3xl mb-20">
