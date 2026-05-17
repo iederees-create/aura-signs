@@ -9,21 +9,27 @@ import Gallery from "./pages/Gallery";
 import About from "./pages/About";
 import FloatingWhatsApp from "./components/FloatingWhatsApp";
 import Navbar from "./components/Navbar";
+import { QuoteProvider } from "./context/QuoteContext";
+import QuoteDrawer from "./components/QuoteDrawer";
 
 export default function App() {
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/gallery" element={<Gallery />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/vault" element={<Vault />} />
-        <Route path="/admin" element={<Admin />} />
-      </Routes>
-      <FloatingWhatsApp />
-    </Router>
+    <QuoteProvider>
+      <Router>
+        <Navbar />
+        <QuoteDrawer />
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/gallery" element={<Gallery />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/vault" element={<Vault />} />
+          <Route path="/admin" element={<Admin />} />
+        </Routes>
+        <FloatingWhatsApp />
+      </Router>
+    </QuoteProvider>
   );
 }
+
