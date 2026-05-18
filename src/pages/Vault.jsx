@@ -101,8 +101,8 @@ export default function Vault() {
     setQuoteSubmitted(true);
     setTimeout(() => {
       setShowQuoteForm(false);
-      const whatsappMsg = encodeURIComponent(`Hi Bold & Bespoke! I have submitted a quote request from my Vault for my wedding on ${e.target.weddingDate.value} at ${e.target.venue.value}.`);
-      window.open(`https://wa.me/27662720491?text=${whatsappMsg}`, '_blank');
+       const whatsappMsg = encodeURIComponent(`Hi Bold & Bespoke! I have submitted a quote request from my Vault for my wedding on ${e.target.weddingDate.value} at ${e.target.venue.value}.`);
+      window.open(`https://wa.me/27629494708?text=${whatsappMsg}`, '_blank');
     }, 2000);
   };
 

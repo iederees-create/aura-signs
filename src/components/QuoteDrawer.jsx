@@ -79,7 +79,7 @@ export default function QuoteDrawer() {
             client_email: clientEmail,
             event_details: generalNotes,
             items_list: formattedItemsList,
-            whatsapp_link: `https://wa.me/27662720491?text=${whatsappEncoded}`
+            whatsapp_link: `https://wa.me/27629494708?text=${whatsappEncoded}`
           }
         };
 
@@ -116,7 +116,7 @@ export default function QuoteDrawer() {
     setIsSending(false);
 
     // 4. Redirect to WhatsApp to start the conversation
-    window.open(`https://wa.me/27662720491?text=${whatsappEncoded}`, '_blank');
+    window.open(`https://wa.me/27629494708?text=${whatsappEncoded}`, '_blank');
   };
 
   return (
